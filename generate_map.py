@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-n = 64
+n = 16
 array_map = np.chararray([n,n], 3, "utf-8")
 
 
@@ -148,13 +148,13 @@ class Cell:
         self.dist = dist
         self.preStep = list(preStep)
 
-def minDistance(array_map):
+def minDistance(array_map, type):
     source = Cell(0, 0, 0, [])
  
     # Finding the source to start from
     for row in range(len(array_map)):
         for col in range(len(array_map[row])):
-            if 'p' in array_map[row][col]:
+            if type in array_map[row][col]:
                 source.row = row
                 source.col = col
                 source.preStep.append((source.row, source.col))
@@ -218,7 +218,7 @@ def isValid(x, y, array_map, visited):
 
 array_map = gen_map(array_map, n)
 print(array_map)
-res = minDistance(array_map)
+res = minDistance(array_map, 'p')
 if (res != -1):
     print("Number of steps:", res.dist)
     print("Pirate is in:", res.preStep.pop(0))

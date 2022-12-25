@@ -2,6 +2,21 @@ from hint import Hint
 from generate_map import *
 
 
+n = 16
+array_map = np.chararray([n, n], 3, "utf-8")
+
+array_map = gen_map(array_map, n)
+print(array_map)
+
+res = minDistance(array_map, 'p')
+if (res != -1):
+    print("Number of steps:", res.dist)
+    print("Pirate is in:", res.preStep.pop(0))
+    print(res.preStep)
+else:
+    print("Can not find")
+
+
 hint = Hint(array_map, n)
 hint.hint_1()
 hint.hint_2()

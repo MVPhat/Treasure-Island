@@ -14,15 +14,14 @@ class Hint:
         # A list of random tiles that doesn't contain the treasure (1 to 12).
         num = random.randint(1, 12)
         cnt = 0
-        tiles = []
         while cnt != num:
             row = random.randint(1, self.n-2)
             col = random.randint(1, self.n-2)
-            if '0' in self.map[row][col] or 'P' in self.map[row][col] or 'M' in self.map[row][col]:
+            value, dump, _ = self.map[row][col]
+            if value == 0 or dump == "P" or dump == 'M':
                 continue
-            tiles.append((row, col))
+            self.map[row][col] = (value, dump, True)
             cnt += 1
-        self.hint_list.append(("h1", tiles))
 
     def hint_2(self):
         # 2-5 regions that 1 of them has the treasure.

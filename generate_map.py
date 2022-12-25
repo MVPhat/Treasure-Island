@@ -81,14 +81,13 @@ def gen_M_and_P_and_T(array_map, n):
         if array_map[row][col] != '0' and "P" not in array_map[row][col] and "M" not in array_map[row][col]:
             array_map[row][col] += "T"
             break
-    
+
     while True:
-        row = random.randint(1,n-2)
+        row = random.randint(1, n-2)
         col = random.randint(1, n-2)
         if array_map[row][col] != '0' and "P" not in array_map[row][col] and "M" not in array_map[row][col] and "T" not in array_map[row][col]:
             array_map[row][col] += "A"
             break
-        
 
     return array_map
 
@@ -232,26 +231,3 @@ def isValid(x, y, array_map, visited):
             (array_map[x][y] != '0') and ("M" not in array_map[x][y]) and (visited[x][y] == False)):
         return True
     return False
-
-
-n = 16
-array_map = np.chararray([n, n], 3, "utf-8")
-
-array_map = gen_map(array_map, n)
-print(array_map)
-
-
-def save_map(array_map):
-    with open("MAP_0.txt", "w") as f:
-        f.write("\n".join([n, n]))
-
-
-save_map(array_map)
-
-res = minDistance(array_map, 'p')
-if (res != -1):
-    print("Number of steps:", res.dist)
-    print("Pirate is in:", res.preStep.pop(0))
-    print(res.preStep)
-else:
-    print("Can not find")

@@ -80,7 +80,15 @@ def gen_M_and_P_and_T(array_map, n):
         if array_map[row][col] != '0' and "P" not in array_map[row][col] and "M" not in array_map[row][col]:
             array_map[row][col] += "T"
             break
+    
+    while True:
+        row = random.randint(1,n-2)
+        col = random.randint(1, n-2)
+        if array_map[row][col] != '0' and "P" not in array_map[row][col] and "M" not in array_map[row][col] and "T" not in array_map[row][col]:
+            array_map[row][col] += "A"
+            break
         
+
     return array_map
 
 def fix_missing_region(array_map, n, regions):

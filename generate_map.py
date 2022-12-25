@@ -1,20 +1,17 @@
 import random
 import numpy as np
 
-n = 16
-array_map = np.chararray([n,n], 3, "utf-8")
-
 
 def fill_region(array_map, n,  topl, topr, botl, botr):
-    #topl
+    # topl
     while topl[0] >= 1 and topl[1] >= 1:
         topl[0] -= 1
         topl[1] -= 1
         for i in range(topl[1], int(n/2-1) + 1):
-            array_map[topl[0]][i] = array_map[int(n/2-1)][int(n/2-1)] 
+            array_map[topl[0]][i] = array_map[int(n/2-1)][int(n/2-1)]
             array_map[i][topl[0]] = array_map[int(n/2-1)][int(n/2-1)]
-    #topr       
-    while topr[0] >= 1 and topr[1] < n-1:    
+    # topr
+    while topr[0] >= 1 and topr[1] < n-1:
         topr[0] -= 1
         topr[1] += 1
         for i in reversed(range(int(n/2), topr[1] + 1)):
@@ -22,16 +19,16 @@ def fill_region(array_map, n,  topl, topr, botl, botr):
         for i in range(topr[0], int(n/2)):
             array_map[i][topr[1]] = array_map[int(n/2) - 1][int(n/2)]
 
-    #botl
+    # botl
     while botl[0] < n-1 and botl[1] >= 1:
         botl[0] += 1
         botl[1] -= 1
         for i in reversed(range(int(n/2), botl[0] + 1)):
             array_map[i][botl[1]] = array_map[int(n/2)][int(n/2) - 1]
-        for i in range(botl[1], int(n/2 -1) + 1):
+        for i in range(botl[1], int(n/2 - 1) + 1):
             array_map[botl[0]][i] = array_map[int(n/2)][int(n/2) - 1]
 
-    #botr
+    # botr
     while botr[0] < n-1 and botr[1] < n-1:
         botr[0] += 1
         botr[1] += 1
@@ -41,24 +38,27 @@ def fill_region(array_map, n,  topl, topr, botl, botr):
 
     return array_map
 
+
 def gen_r_left(array_map, n, re_left):
-    for i in range(4,6):
-        index_row = random.randint(4,n-4)
+    for i in range(4, 6):
+        index_row = random.randint(4, n-4)
         index_col = random.randint(4, n-4)
         size = random.randint(int(n/4), int(n/2))
         #print(f"number {str(i)} with row: {index_row} and col: {index_col} and size: {size}")
         for j in range(index_row, n - 2):
             cnt = 0
             for k in range(index_col, n - 2):
-                if cnt == size: break
-                if j < n -1 and k < n - 1:
+                if cnt == size:
+                    break
+                if j < n - 1 and k < n - 1:
                     array_map[j][k] = str(re_left[i])
                 cnt += 1
     return array_map
 
+
 def gen_M_and_P_and_T(array_map, n):
     ranPirate = []
-    for i in range(1,7):
+    for i in range(1, 7):
         if str(i) in array_map:
             prison = list(zip(*np.where(array_map == str(i))))
             ranprison = random.randint(0, len(prison) - 1)
@@ -67,15 +67,16 @@ def gen_M_and_P_and_T(array_map, n):
 
     ranIndexPirate = random.randint(0, len(ranPirate) - 1)
 
-    array_map[ranPirate[ranIndexPirate][0]][ranPirate[ranIndexPirate][1]] += "p"
+    array_map[ranPirate[ranIndexPirate][0]
+              ][ranPirate[ranIndexPirate][1]] += "p"
 
     for i in range(n):
         for j in range(n):
-            mountain = random.randint(0, 5) #0: yes, >=1: no
+            mountain = random.randint(0, 5)  # 0: yes, >=1: no
             if mountain == 0 and "P" not in array_map[i][j] and array_map[i][j] != "0":
                 array_map[i][j] = array_map[i][j] + "M"
     while True:
-        row = random.randint(1,n-2)
+        row = random.randint(1, n-2)
         col = random.randint(1, n-2)
         if array_map[row][col] != '0' and "P" not in array_map[row][col] and "M" not in array_map[row][col]:
             array_map[row][col] += "T"
@@ -91,6 +92,7 @@ def gen_M_and_P_and_T(array_map, n):
 
     return array_map
 
+
 def fix_missing_region(array_map, n, regions):
     arr_tmp = np.array(array_map, dtype=np.int32)
     fix = []
@@ -101,11 +103,12 @@ def fix_missing_region(array_map, n, regions):
     print(fix)
     print("delete:", deleteNum)
 
+
 def gen_map(array_map, n):
     # 1->6
     regions = 7
 
-    re_left = random.sample(range(1,regions), 6)
+    re_left = random.sample(range(1, regions), 6)
 
     topl = [int((n/2)-1), int((n/2)-1)]
     topr = [int((n/2)-1), int((n/2))]
@@ -120,17 +123,17 @@ def gen_map(array_map, n):
     array_map = fill_region(array_map, n, topl, topr, botl, botr)
     array_map = gen_r_left(array_map, n, re_left)
 
-    #random sea
+    # random sea
     array_map[0] = "0"
     array_map[n-1] = "0"
-    array_map[:,0] = "0"
+    array_map[:, 0] = "0"
     array_map[:, n-1] = "0"
     for i in range(1, n-2):
-        sea = random.randint(0,3)
-        #print(sea)
-        
-        left_right = random.randint(0,1) #0: left, 1: right
-        up_down = random.randint(0, 1) #0: up, 1: down
+        sea = random.randint(0, 3)
+        # print(sea)
+
+        left_right = random.randint(0, 1)  # 0: left, 1: right
+        up_down = random.randint(0, 1)  # 0: up, 1: down
 
         if left_right == 0:
             for j in range(sea):
@@ -143,11 +146,12 @@ def gen_map(array_map, n):
             for k in range(sea):
                 array_map[k][i] = "0"
         else:
-            for h in range(n - 1 - sea, n- 1):
+            for h in range(n - 1 - sea, n - 1):
                 array_map[h][i] = "0"
     #fix_missing_region(array_map, n, regions)
-    array_map = gen_M_and_P_and_T(array_map,n)
+    array_map = gen_M_and_P_and_T(array_map, n)
     return array_map
+
 
 class Cell:
     def __init__(self, row, col, dist, preStep):
@@ -156,9 +160,10 @@ class Cell:
         self.dist = dist
         self.preStep = list(preStep)
 
+
 def minDistance(array_map, type):
     source = Cell(0, 0, 0, [])
- 
+
     # Finding the source to start from
     for row in range(len(array_map)):
         for col in range(len(array_map[row])):
@@ -167,11 +172,11 @@ def minDistance(array_map, type):
                 source.col = col
                 source.preStep.append((source.row, source.col))
                 break
- 
+
     # To maintain location visit status
     visited = [[False for _ in range(len(array_map[0]))]
                for _ in range(len(array_map))]
-     
+
     # applying BFS on matrix cells starting from source
     queue = []
     queue.append(source)
@@ -184,37 +189,42 @@ def minDistance(array_map, type):
 
         # moving up
         if isValid(source.row - 1, source.col, array_map, visited):
-            nextStep = Cell(source.row - 1, source.col, source.dist + 1, source.preStep)
+            nextStep = Cell(source.row - 1, source.col,
+                            source.dist + 1, source.preStep)
             nextStep.preStep.append(((nextStep.row, nextStep.col)))
             queue.append(nextStep)
             #print("up", source.row, source.col)
             visited[source.row - 1][source.col] = True
- 
+
         # moving down
         if isValid(source.row + 1, source.col, array_map, visited):
-            nextStep = Cell(source.row + 1, source.col, source.dist + 1, source.preStep)
+            nextStep = Cell(source.row + 1, source.col,
+                            source.dist + 1, source.preStep)
             nextStep.preStep.append((nextStep.row, nextStep.col))
             queue.append(nextStep)
             #print("down", source.row, source.col)
             visited[source.row + 1][source.col] = True
- 
+
         # moving left
         if isValid(source.row, source.col - 1, array_map, visited):
-            nextStep = Cell(source.row, source.col - 1, source.dist + 1, source.preStep)
+            nextStep = Cell(source.row, source.col - 1,
+                            source.dist + 1, source.preStep)
             nextStep.preStep.append((nextStep.row, nextStep.col))
             queue.append(nextStep)
             #print("left", source.row, source.col)
             visited[source.row][source.col - 1] = True
- 
+
         # moving right
         if isValid(source.row, source.col + 1, array_map, visited):
-            nextStep = Cell(source.row, source.col + 1, source.dist + 1, source.preStep)
+            nextStep = Cell(source.row, source.col + 1,
+                            source.dist + 1, source.preStep)
             nextStep.preStep.append((nextStep.row, nextStep.col))
             queue.append(nextStep)
             #print("right", source.row, source.col)
             visited[source.row][source.col + 1] = True
 
     return -1
+
 
 def isValid(x, y, array_map, visited):
     if ((x >= 0 and y >= 0) and
@@ -224,12 +234,24 @@ def isValid(x, y, array_map, visited):
     return False
 
 
+n = 16
+array_map = np.chararray([n, n], 3, "utf-8")
+
 array_map = gen_map(array_map, n)
 print(array_map)
+
+
+def save_map(array_map):
+    with open("MAP_0.txt", "w") as f:
+        f.write("\n".join([n, n]))
+
+
+save_map(array_map)
+
 res = minDistance(array_map, 'p')
 if (res != -1):
     print("Number of steps:", res.dist)
     print("Pirate is in:", res.preStep.pop(0))
     print(res.preStep)
-else: print("Can not find")
-
+else:
+    print("Can not find")

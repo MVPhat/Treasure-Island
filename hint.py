@@ -1,133 +1,139 @@
-from generate_map import *
+import random
+import numpy as np
+from generate_map import minDistance
+
 
 class Hint:
     def __init__(self, array_map, n):
         self.map = array_map
         self.n = n
-        self.mask_map = np.ones([n,n], dtype=bool)
+        self.mask_map = np.ones([n, n], dtype=bool)
         self.hint_list = []
 
     def hint_1(self):
-        #A list of random tiles that doesn't contain the treasure (1 to 12).
-        num = random.randint(1,12)
+        # A list of random tiles that doesn't contain the treasure (1 to 12).
+        num = random.randint(1, 12)
         cnt = 0
         tiles = []
         while cnt != num:
-            row = random.randint(1,n-2)
-            col = random.randint(1,n-2)
+            row = random.randint(1, self.n-2)
+            col = random.randint(1, self.n-2)
             if '0' in self.map[row][col] or 'P' in self.map[row][col] or 'M' in self.map[row][col]:
                 continue
-            tiles.append((row,col))
+            tiles.append((row, col))
             cnt += 1
         self.hint_list.append(("h1", tiles))
 
     def hint_2(self):
-        #2-5 regions that 1 of them has the treasure.
+        # 2-5 regions that 1 of them has the treasure.
         region_list = []
-        for i in range(1,7):
+        for i in range(1, 7):
             if str(i) in self.map:
                 region_list.append(i)
-        region = random.sample(region_list, random.randint(2,5))
+        region = random.sample(region_list, random.randint(2, 5))
         self.hint_list.append(("h2", region))
 
     def hint_3(self):
-        #1-3 regions that do not contain the treasure.
+        # 1-3 regions that do not contain the treasure.
         region_list = []
-        for i in range(1,7):
+        for i in range(1, 7):
             if str(i) in self.map:
                 region_list.append(i)
-        region = random.sample(region_list, random.randint(1,3))
+        region = random.sample(region_list, random.randint(1, 3))
         self.hint_list.append(("h3", region))
 
     def hint_4(self):
-        #A large rectangle area that has the treasure
+        # A large rectangle area that has the treasure
         while True:
-            tlbr = random.sample(range(n), 4)
+            tlbr = random.sample(range(self.n), 4)
             tlbr.sort()
-            if (tlbr[3] - tlbr[1]) >= int(n/2) and (tlbr[2] - tlbr[0]) >= int(n/2):
+            if (tlbr[3] - tlbr[1]) >= int(self.n/2) and (tlbr[2] - tlbr[0]) >= int(self.n/2):
                 break
         self.hint_list.append(("h4", tlbr))
 
     def hint_5(self):
-        #A small rectangle area that doesn't has the treasure.
+        # A small rectangle area that doesn't has the treasure.
         while True:
-            tlbr = random.sample(range(n), 4)
+            tlbr = random.sample(range(self.n), 4)
             tlbr.sort()
-            if (tlbr[3] - tlbr[1]) <= int(n/3) and (tlbr[2] - tlbr[0]) <= int(n/3):
+            if (tlbr[3] - tlbr[1]) <= int(self.n/3) and (tlbr[2] - tlbr[0]) <= int(self.n/3):
                 break
         self.hint_list.append(("h5", tlbr))
 
     def hint_6(self):
-        #He tells you that you are the nearest person to the treasure (between 
-        #you and the prison he is staying)
+        # He tells you that you are the nearest person to the treasure (between
+        # you and the prison he is staying)
         pirate = minDistance(self.map, 'p')
         agent = minDistance(self.map, 'A')
 
-        #verify hint 6
+        # verify hint 6
         if pirate != -1 and agent != -1:
             if len(pirate.preStep) > len(agent.preStep):
-                self.hint_list.append(("h6", True)) #agent is nearest T
-            else: self.hint_list.append(("h6", False)) #otherwise
+                self.hint_list.append(("h6", True))  # agent is nearest T
+            else:
+                self.hint_list.append(("h6", False))  # otherwise
 
     def hint_7(self):
-        #A column and/or a row that contain the treasure (rare)
-        for i in range(n):
-            for j in range(n):
+        # A column and/or a row that contain the treasure (rare)
+        for i in range(self.n):
+            for j in range(self.n):
                 if "T" in self.map[i][j]:
-                    row_col = random.randint(0,2) #0: row, 1: col, 2: both
+                    row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
                     if row_col == 0:
                         self.hint_list.append(("h7", ("r", i)))
-                    elif row_col == 1: self.hint_list.append(("h7", ("c", j)))
-                    else: self.hint_list.append(("h7", ("r_c", i, j)))
+                    elif row_col == 1:
+                        self.hint_list.append(("h7", ("c", j)))
+                    else:
+                        self.hint_list.append(("h7", ("r_c", i, j)))
 
     def hint_8(self):
-        #A column and/or a row that do not contain the treasure.
+        # A column and/or a row that do not contain the treasure.
         while True:
-            row = random.randint(1,n-2)
-            col = random.randint(1,n-2)
+            row = random.randint(1, self.n-2)
+            col = random.randint(1, self.n-2)
             if '0' in self.map[row][col] or 'P' in self.map[row][col] or 'M' in self.map[row][col]:
                 continue
-            row_col = random.randint(0,2) #0: row, 1: col, 2: both
+            row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
             if row_col == 0:
                 self.hint_list.append(("h8", ("r", row)))
                 return
-            elif row_col == 1: 
+            elif row_col == 1:
                 self.hint_list.append(("h8", ("c", col)))
                 return
             self.hint_list.append(("h8", ("r_c", row, col)))
             return
 
     def hint_9(self):
-        #2 regions that the treasure is somewhere in their boundary
+        # 2 regions that the treasure is somewhere in their boundary
         return
 
     def hint_10(self):
-        #The treasure is somewhere in a boundary of 2 regions
+        # The treasure is somewhere in a boundary of 2 regions
         return
 
     def hint_11(self):
-        #The treasure is somewhere in an area bounded by 2-3 tiles from sea.
-        tiles = random.ranint(2,3)
-        cnt = [i for i in range(n)]
+        # The treasure is somewhere in an area bounded by 2-3 tiles from sea.
+        tiles = random.randint(2, 3)
+        cnt = [i for i in range(self.n)]
         index = []
 
         for i in range(tiles):
             index_top = 1
-            index_bot = n - 2
+            index_bot = self.n - 2
             index_left = 1
-            index_right = n - 2
-
+            index_right = self.n - 2
 
         #self.hint_list.append(("h11", random.random(2,3)))
 
     def hint_12(self):
-        #A half of the map without treasure (rare)
-        if float(int(np.flatnonzero(np.core.defchararray.find(self.map, "T") != -1))/n) >= float(n/2):
-            self.hint_list.append(("h12", False)) #half bot has T
-        else: self.hint_list.append(("h12", True)) #half top has T
+        # A half of the map without treasure (rare)
+        if float(int(np.flatnonzero(np.core.defchararray.find(self.map, "T") != -1))/self.n) >= float(self.n/2):
+            self.hint_list.append(("h12", False))  # half bot has T
+        else:
+            self.hint_list.append(("h12", True))  # half top has T
 
     def hint_13(self):
-        #From the center of the map/from the prison that he's staying, he tells
+        # From the center of the map/from the prison that he's staying, he tells
         # you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW)
         # (The shape of area when the hints are either W, E, N or S is triangle).
         return
@@ -138,16 +144,16 @@ class Hint:
         # squares. (rare)
         while True:
             while True:
-                tlbr = random.sample(range(n), 4)
+                tlbr = random.sample(range(self.n), 4)
                 tlbr.sort()
-                if (tlbr[3] - tlbr[1]) >= int(n/3) and (tlbr[2] - tlbr[0]) >= int(n/3):
+                if (tlbr[3] - tlbr[1]) >= int(self.n/3) and (tlbr[2] - tlbr[0]) >= int(self.n/3):
                     break
             big = tlbr
-            
+
             while True:
-                tlbr = random.sample(range(n), 4)
+                tlbr = random.sample(range(self.n), 4)
                 tlbr.sort()
-                if (tlbr[3] - tlbr[1]) <= int(n/5) and (tlbr[2] - tlbr[0]) <= int(n/5):
+                if (tlbr[3] - tlbr[1]) <= int(self.n/5) and (tlbr[2] - tlbr[0]) <= int(self.n/5):
                     break
             small = tlbr
 
@@ -156,13 +162,14 @@ class Hint:
                 break
 
     def hint_15(self):
-        #The treasure is in a region that has mountain
+        # The treasure is in a region that has mountain
         mountain_region = []
-        for i in range(n):
-            for j in range(n):
+        for i in range(self.n):
+            for j in range(self.n):
                 if 'M' in self.map[i][j] and self.map[i][j][0] not in mountain_region:
                     mountain_region.append(self.map[i][j][0])
-        self.hint_list.append(("h15", mountain_region[random.randint(0, len(mountain_region) - 1)]))
+        self.hint_list.append(
+            ("h15", mountain_region[random.randint(0, len(mountain_region) - 1)]))
 
     def verify(self, choose):
         isTrue = False
@@ -170,9 +177,9 @@ class Hint:
             #contain or not contain
             for i in choose[1]:
                 if "T" in self.map[i[0]][i[1]]:
-                    isTrue = True # 1-> 12 tiles contain T
-            for i in range(n):
-                for j in range(n):
+                    isTrue = True  # 1-> 12 tiles contain T
+            for i in range(self.n):
+                for j in range(self.n):
                     if isTrue == True and (i, j) not in choose[1]:
                         self.mask_map[i][j] = False
                     elif isTrue == False and (i, j) in choose[1]:
@@ -184,8 +191,8 @@ class Hint:
                 if str(i) + "T" in self.map:
                     isTrue = True
                     r = str(i)
-            for i in range(n):
-                for j in range(n):
+            for i in range(self.n):
+                for j in range(self.n):
                     if isTrue == True and r != "" and r != self.map[i][j][0]:
                         self.mask_map[i][j] = False
                     elif isTrue == False and r == "" and int(self.map[i][j][0]) in choose[1]:
@@ -202,17 +209,17 @@ class Hint:
                     if row > choose[1][2]:
                         break
                 index.append((row, col))
-                if "T" in array_map[row][col]:
+                if "T" in self.map[row][col]:
                     isTrue = True
                 col += 1
-                
+
             if isTrue == False:
                 for i in index:
                     self.mask_map[i[0]][i[1]] = False
             else:
-                for i in range(n):
-                    for j in range(n):
-                        if (i,j) not in index:
+                for i in range(self.n):
+                    for j in range(self.n):
+                        if (i, j) not in index:
                             self.mask_map[i][j] = False
 
         elif choose[0] == "h6":
@@ -238,7 +245,7 @@ class Hint:
             elif choose[1][0] == "r_c" and isTrue == False:
                 self.map[choose[1][1]][:] = False
                 self.map[:][choose[1][1]] = False
-            #mask another if row/col has T
+            # mask another if row/col has T
             return
 
         elif choose[0] == "h9":
@@ -261,31 +268,3 @@ class Hint:
         print()
         for i in self.hint_list:
             print(i, end='\n')
-
-
-
-hint = Hint(array_map, n)
-hint.hint_1()
-hint.hint_2()
-hint.hint_3()
-hint.hint_4()
-hint.hint_5()
-hint.hint_6()
-hint.hint_7()
-hint.hint_8()
-hint.hint_12()
-hint.hint_14()
-hint.hint_15()
-
-hint.print_hint_list()
-
-# hint.verify(hint.hint_list[0])
-# hint.verify(hint.hint_list[1])
-# hint.verify(hint.hint_list[2])
-print("\n\n")
-print(hint.hint_list[6])
-hint.verify(hint.hint_list[6])
-
-
-
-#print(hint.mask_map)

@@ -44,20 +44,20 @@ class Hint:
     def hint_4(self):
         # A large rectangle area that has the treasure
         while True:
-            tlbr = random.sample(range(self.n), 4)
-            tlbr.sort()
-            if (tlbr[3] - tlbr[1]) >= int(self.n/2) and (tlbr[2] - tlbr[0]) >= int(self.n/2):
+            rectangle = random.sample(range(self.n), 4)
+            rectangle.sort()
+            if (rectangle[3] - rectangle[1]) >= int(self.n/2) and (rectangle[2] - rectangle[0]) >= int(self.n/2):
                 break
-        self.hint_list.append(("h4", tlbr))
+        self.hint_list.append(("h4", rectangle))
 
     def hint_5(self):
         # A small rectangle area that doesn't has the treasure.
         while True:
-            tlbr = random.sample(range(self.n), 4)
-            tlbr.sort()
-            if (tlbr[3] - tlbr[1]) <= int(self.n/3) and (tlbr[2] - tlbr[0]) <= int(self.n/3):
+            rectangle = random.sample(range(self.n), 4)
+            rectangle.sort()
+            if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3):
                 break
-        self.hint_list.append(("h5", tlbr))
+        self.hint_list.append(("h5", rectangle))
 
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
@@ -99,7 +99,8 @@ class Hint:
             elif row_col == 1:
                 self.hint_list.append(("h8", ("c", col)))
                 return
-            self.hint_list.append(("h8", ("r_c", row, col)))
+            else: 
+                self.hint_list.append(("h8", ("r_c", row, col)))
             return
 
     def hint_9(self):
@@ -143,18 +144,18 @@ class Hint:
         # squares. (rare)
         while True:
             while True:
-                tlbr = random.sample(range(self.n), 4)
-                tlbr.sort()
-                if (tlbr[3] - tlbr[1]) >= int(self.n/3) and (tlbr[2] - tlbr[0]) >= int(self.n/3):
+                rectangle = random.sample(range(self.n), 4)
+                rectangle.sort()
+                if (rectangle[3] - rectangle[1]) >= int(self.n/3) and (rectangle[2] - rectangle[0]) >= int(self.n/3):
                     break
-            big = tlbr
+            big = rectangle
 
             while True:
-                tlbr = random.sample(range(self.n), 4)
-                tlbr.sort()
-                if (tlbr[3] - tlbr[1]) <= int(self.n/5) and (tlbr[2] - tlbr[0]) <= int(self.n/5):
+                rectangle = random.sample(range(self.n), 4)
+                rectangle.sort()
+                if (rectangle[3] - rectangle[1]) <= int(self.n/5) and (rectangle[2] - rectangle[0]) <= int(self.n/5):
                     break
-            small = tlbr
+            small = rectangle
 
             if big[0] < small[0] and big[1] < small[1] and big[2] > small[2] and big[3] > small[3]:
                 self.hint_list.append(("h14", big, small))
@@ -224,7 +225,7 @@ class Hint:
         elif choose[0] == "h6":
             isTrue = choose[1]
 
-        elif choose[0] == "h7" and choose[0] == "h8":
+        elif choose[0] == "h7" or choose[0] == "h8":
             if choose[1][0] == "r":
                 for i in range(self.n):
                     if "T" in self.map[choose[1][1]][i]:

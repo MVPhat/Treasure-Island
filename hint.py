@@ -159,23 +159,33 @@ class Hint:
         is_center_prison = random.choice(["center", "prison"])
 
         if is_center_prison == "center":
-            direction = random.choice(["W", "E", "N", "S"])
-            start = 0
-            end = self.n
-            while start != int(self.n/2):
-                if direction == 'S':
-                    self.map[start][start:end]['mark'] = True
-                elif direction == 'E':
-                    self.map[start:end, start]['mark'] = True
-                elif direction == 'N':
-                    self.map[end - 1][start:end]['mark'] = True
-                else: 
-                    self.map[start:end, end - 1]['mark'] = True
-                start += 1
-                end -= 1
+            direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
+            if direction == 'SE':
+                self.map[0:int(self.n/2), 0:int(self.n/2)]['mark'] = True
+            elif direction == 'SW':
+                self.map[0:int(self.n/2), int(self.n/2):self.n]['mark'] = True
+            elif direction == 'NE':
+                self.map[int(self.n/2):self.n, 0:int(self.n/2)]['mark'] = True
+            elif direction == 'NW':
+                self.map[int(self.n/2):self.n, int(self.n/2):self.n]['mark'] = True
+            else:
+                start = 0
+                end = self.n
+                while start != int(self.n/2):
+                    if direction == 'S':
+                        self.map[start][start:end]['mark'] = True
+                    elif direction == 'E':
+                        self.map[start:end, start]['mark'] = True
+                    elif direction == 'N':
+                        self.map[end - 1][start:end]['mark'] = True
+                    else: 
+                        self.map[start:end, end - 1]['mark'] = True
+                    start += 1
+                    end -= 1
                 
         else:
             direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
+            prison = self.find_prison_index()
 
 
     def hint_14(self):
@@ -249,3 +259,8 @@ class Hint:
         print()
         for i in self.hint_list:
             print(f"{i[0]}, {i[1]}", end='\n')
+
+    def find_prison_index(self):
+        prison_list = list(zip(*np.argwhere(self.map['type'] == 'P')))
+        ranidx = random.randint(0, len(prison_list[0]) - 1)
+        return (prison_list[0][ranidx], prison_list[1][ranidx])

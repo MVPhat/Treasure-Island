@@ -34,31 +34,32 @@ def readInputFile(filename):
 
 
 HINTS_NAME = [
-    "A list of random tiles that doesn't contain the treasure (1 to 12)",
-    "2-5 regions that 1 of them has the treasure",
-    "1-3 regions that do not contain the treasure",
-    "A large rectangle area that has the treasure",
-    "A small rectangle area that doesn't has the treasure",
-    "He tells you that you are the nearest person to the treasure (between you and the prison he is staying)",
-    "A column and/or a row that contain the treasure (rare)",
-    "A column and/or a row that do not contain the treasure",
-    # "2 regions that the treasure is somewhere in their boundary",
-    # 'The treasure is somewhere in a boundary of 2 regions',
-    # 'The treasure is somewhere in an area bounded by 2-3 tiles from sea',
-    # 'A half of the map without treasure (rare)',
-    # 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)',
-    # '2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)',
-    # 'The treasure is in a region that has mountain',
+    (1, "A list of random tiles that doesn't contain the treasure (1 to 12)"),
+    (2, "2-5 regions that 1 of them has the treasure"),
+    (3, "1-3 regions that do not contain the treasure"),
+    (4, "A large rectangle area that has the treasure"),
+    (5, "A small rectangle area that doesn't has the treasure"),
+    # (6, "He tells you that you are the nearest person to the treasure (between you and the prison he is staying)"),
+    (7, "A column and/or a row that contain the treasure (rare)"),
+    (8, "A column and/or a row that do not contain the treasure"),
+    # (9, "2 regions that the treasure is somewhere in their boundary"),
+    # (10, 'The treasure is somewhere in a boundary of 2 regions'),
+    # (11, 'The treasure is somewhere in an area bounded by 2-3 tiles from sea'),
+    # (12, 'A half of the map without treasure (rare)'),
+    # (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
+    # (14, '2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)'),
+    # (15, 'The treasure is in a region that has mountain'),
 ]
 
 
 for i in range(len(HINTS_NAME)):
-    print(HINTS_NAME[i])
+    num, name = HINTS_NAME[i]
+    print(name)
     visual = Visualization(width, height, Tx, Ty, map)
 
-    visual.visualize(f"h{i+1}")
+    visual.visualize(f"h{num}")
 
-    visual.verify(f"h{i+1}")
+    visual.verify(f"h{num}")
 
     visual.clear_mark()
 

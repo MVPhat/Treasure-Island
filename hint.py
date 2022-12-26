@@ -29,8 +29,8 @@ class Hint:
         for i in range(self.n):
             for j in range(self.n):
                 if self.map[i][j]['region'] in region:
-                    self.map[i][j] = (self.map[i][j]['region'], self.map[i][j]['type'], True, 1)
-        
+                    self.map[i][j] = (self.map[i][j]['region'],
+                                      self.map[i][j]['type'], True, 1)
 
     def hint_3(self):
         # 1-3 regions that do not contain the treasure.
@@ -43,7 +43,8 @@ class Hint:
         for i in range(self.n):
             for j in range(self.n):
                 if self.map[i][j]['region'] in region:
-                    self.map[i][j] = (self.map[i][j]['region'], self.map[i][j]['type'], True, 1)
+                    self.map[i][j] = (self.map[i][j]['region'],
+                                      self.map[i][j]['type'], True, 1)
 
     def hint_4(self):
         # A large rectangle area that has the treasure
@@ -52,7 +53,8 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) >= int(self.n/2) and (rectangle[2] - rectangle[0]) >= int(self.n/2):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
+                               :(rectangle[3] + 1)]['mark'] = True
         # map_visualize[rectangle[0]:(rectangle[2] + 1),
         #               rectangle[1]:(rectangle[3] + 1)] = True
         # self.hint_list.append(("h4", rectangle, map_visualize))
@@ -64,7 +66,8 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
+                               :(rectangle[3] + 1)]['mark'] = True
 
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
@@ -147,8 +150,8 @@ class Hint:
 
     def hint_12(self):
         # A half of the map without treasure (rare)
-        half = random.randint(0,1)
-        if half == 0: #row half
+        half = random.randint(0, 1)
+        if half == 0:  # row half
             col = self.n
             row = int(self.n/2)
         else:
@@ -199,90 +202,30 @@ class Hint:
             ("h15", mountain_region[random.randint(0, len(mountain_region) - 1)]))
 
     def verify(self, choose):
-        if choose == "h1" or choose == "h2" or choose == "h3":
-            dump = [str(self.map['type'][i][j]) + str(self.map['mark'][i][j])
-                    for i in range(self.n) for j in range(self.n)]
-            hint_res = 'TTrue' in dump
+        if choose == 'h1' or choose == 'h3' or choose == 'h5' or choose == 'h8':
+            hint_isPositive = False
+        elif choose == 'h6':
+            return
+        else:
+            hint_isPositive = True
 
-            print(f'Hint {choose} is: {hint_res}')
+        dump = [str(self.map['type'][i][j]) + str(self.map['mark'][i][j])
+                for i in range(self.n) for j in range(self.n)]
+        hint_res = not (('TTrue' in dump) ^ hint_isPositive)
 
-            for i in range(self.n):
-                for j in range(self.n):
-                    value, dump, visual, ratio = self.map[i][j]
-                    if (ratio == 0):
-                        ratio = 0
+        print(f'==> Hint {choose} is: {hint_res}')
+
+        for i in range(self.n):
+            for j in range(self.n):
+                value, dump, visual, ratio = self.map[i][j]
+                if (ratio == 0):
+                    ratio = 0
+                else:
+                    if hint_isPositive:
+                        ratio = 1 if not (hint_res ^ visual) else 0
                     else:
-                        if not (visual ^ hint_res):
-                            ratio = 1
-                        else:
-                            ratio = 0
-                    self.map[i][j] = (value, dump, visual, ratio)
-
-        elif choose[0] == "h4" or choose[0] == "h5":
-            row = choose[1][0]
-            col = choose[1][1]
-            index = []
-            while True:
-                if col == choose[1][3]:
-                    col = choose[1][1]
-                    row += 1
-                    if row > choose[1][2]:
-                        break
-                index.append((row, col))
-                if "T" in self.map[row][col]:
-                    isTrue = True
-                col += 1
-
-            if isTrue == False:
-                for i in index:
-                    self.mask_map[i[0]][i[1]] = False
-            else:
-                for i in range(self.n):
-                    for j in range(self.n):
-                        if (i, j) not in index:
-                            self.mask_map[i][j] = False
-
-        elif choose[0] == "h6":
-            isTrue = choose[1]
-
-        elif choose[0] == "h7" or choose[0] == "h8":
-            if choose[1][0] == "r":
-                for i in range(self.n):
-                    if "T" in self.map[choose[1][1]][i]:
-                        isTrue = True
-            elif choose[1][0] == "c":
-                for i in range(self.n):
-                    if "T" in self.map[i][choose[1][1]]:
-                        isTrue = True
-            else:
-                for i in range(self.n):
-                    if "T" in self.map[choose[1][1]][i] or "T" in self.map[i][choose[1][1]]:
-                        isTrue = True
-            if choose[1][0] == "r" and isTrue == False:
-                self.mask_map[choose[1][1]][:] = False
-            elif choose[1][0] == "c" and isTrue == False:
-                self.mask_map[:][choose[1][1]] = False
-            elif choose[1][0] == "r_c" and isTrue == False:
-                self.map[choose[1][1]][:] = False
-                self.map[:][choose[1][1]] = False
-            # mask another if row/col has T
-            return
-
-        elif choose[0] == "h9":
-            return
-        elif choose[0] == "h10":
-            return
-        elif choose[0] == "h11":
-            return
-        elif choose[0] == "h12":
-            return
-        elif choose[0] == "h13":
-            return
-        elif choose[0] == "h14":
-            return
-        elif choose[0] == "h15":
-            return
-        # return isTrue
+                        ratio = 1 if (hint_res ^ visual) else 0
+                self.map[i][j] = (value, dump, visual, ratio)
 
     def print_hint_list(self):
         print()

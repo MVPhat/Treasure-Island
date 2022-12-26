@@ -135,7 +135,6 @@ class Hint:
 
     def hint_12(self):
         # A half of the map without treasure (rare)
-<<<<<<< HEAD
         half = random.randint(0,1)
         if half == 0: #row half
             half = random.randint(0, 1)
@@ -151,19 +150,6 @@ class Hint:
             else:
                 self.map[:,int(self.n/2):self.n]['mark'] = True
 
-=======
-        half = random.randint(0, 1)
-        if half == 0:  # row half
-            col = self.n
-            row = int(self.n/2)
-        else:
-            row = self.n
-            col = int(self.n/2)
-        if float(int(np.flatnonzero(np.core.defchararray.find(self.map, "T") != -1))/self.n) >= float(self.n/2):
-            self.hint_list.append(("h12", False))  # half bot has T
-        else:
-            self.hint_list.append(("h12", True))  # half top has T
->>>>>>> 5e4eaf2bded645a9c91cd8746b598385fab2b7ca
 
     def hint_13(self):
         # From the center of the map/from the prison that he's staying, he tells

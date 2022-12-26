@@ -7,8 +7,6 @@ class Hint:
     def __init__(self, array_map, n):
         self.map = array_map
         self.n = n
-        self.mask_map = np.ones([n, n], dtype=bool)
-        self.hint_list = []
 
     def hint_1(self):
         # A list of random tiles that doesn't contain the treasure (1 to 12).
@@ -17,20 +15,21 @@ class Hint:
         while cnt != num:
             row = random.randint(1, self.n-2)
             col = random.randint(1, self.n-2)
-            value, dump, _ = self.map[row][col]
+            value, dump, _, ratio = self.map[row][col]
             if value == 0 or dump == "P" or dump == 'M':
                 continue
-            self.map[row][col] = (value, dump, True)
+            self.map[row][col] = (value, dump, True, ratio)
             cnt += 1
 
     def hint_2(self):
         # 2-5 regions that 1 of them has the treasure.
+        print(self.map['ratio'])
         region_list = []
         for i in range(1, 7):
-            if str(i) in self.map:
+            if str(i) in self.map['type']:
                 region_list.append(i)
         region = random.sample(region_list, random.randint(2, 5))
-        self.hint_list.append(("h2", region))
+        print(region)
 
     def hint_3(self):
         # 1-3 regions that do not contain the treasure.
@@ -172,17 +171,13 @@ class Hint:
 
     def verify(self, choose):
         isTrue = False
-        if choose[0] == "h1":
-            #contain or not contain
-            for i in choose[1]:
-                if "T" in self.map[i[0]][i[1]]:
-                    isTrue = True  # 1-> 12 tiles contain T
+        if choose == "h1":
             for i in range(self.n):
                 for j in range(self.n):
-                    if isTrue == True and (i, j) not in choose[1]:
-                        self.mask_map[i][j] = False
-                    elif isTrue == False and (i, j) in choose[1]:
-                        self.mask_map[i][j] = False
+                    value, dump, visual, _ = self.map[i][j]
+                    if (visual):
+                        self.map[i][j] = (value, dump, True, 0)
+            return self.map
 
         elif choose[0] == "h2" or choose[0] == "h3":
             r = ""

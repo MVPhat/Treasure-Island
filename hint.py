@@ -12,8 +12,6 @@ class Hint:
         # A list of random tiles that doesn't contain the treasure (1 to 12).
         num = random.randint(1, 12)
         cnt = 0
-        tiles = []
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
         while cnt != num:
             row = random.randint(1, self.n-2)
             col = random.randint(1, self.n-2)
@@ -25,102 +23,109 @@ class Hint:
 
     def hint_2(self):
         # 2-5 regions that 1 of them has the treasure.
-        print(self.map['ratio'])
-        region_list = []
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
-        for i in range(1, 7):
-            if str(i) in self.map['type']:
-                region_list.append(i)
-        region = random.sample(region_list, random.randint(2, 5))
-        print(region)
+        # region_list = []
+        # for i in range(1, 7):
+        #     if i in self.map['region']:
+        #         region_list.append(i)
+        region_list = np.unique(self.map['region'])
+        region = random.sample(list(region_list), random.randint(2, 5))
+
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.map[i][j]['region'] in region:
+                    self.map[i][j] = (self.map[i][j]['region'], self.map[i][j]['type'], True, 1)
+        
 
     def hint_3(self):
         # 1-3 regions that do not contain the treasure.
         region_list = []
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
         for i in range(1, 7):
-            if str(i) in self.map:
+            if i in self.map['region']:
                 region_list.append(i)
+
         region = random.sample(region_list, random.randint(1, 3))
         for i in range(self.n):
             for j in range(self.n):
-                if self.map[i][j][0] in region:
-                    map_visualize[i][j] = True
-        self.hint_list.append(("h3", region, map_visualize))
+                if self.map[i][j]['region'] in region:
+                    self.map[i][j] = (self.map[i][j]['region'], self.map[i][j]['type'], True, 1)
 
     def hint_4(self):
         # A large rectangle area that has the treasure
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
         while True:
             rectangle = random.sample(range(self.n), 4)
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) >= int(self.n/2) and (rectangle[2] - rectangle[0]) >= int(self.n/2):
                 break
-        map_visualize[rectangle[0]:(rectangle[2] + 1),
-                      rectangle[1]:(rectangle[3] + 1)] = True
-        self.hint_list.append(("h4", rectangle, map_visualize))
-        return map_visualize
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
+        # map_visualize[rectangle[0]:(rectangle[2] + 1),
+        #               rectangle[1]:(rectangle[3] + 1)] = True
+        # self.hint_list.append(("h4", rectangle, map_visualize))
 
     def hint_5(self):
         # A small rectangle area that doesn't has the treasure.
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
         while True:
             rectangle = random.sample(range(self.n), 4)
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3):
                 break
-        map_visualize[rectangle[0]:(rectangle[2] + 1),
-                      rectangle[1]:(rectangle[3] + 1)] = True
-        self.hint_list.append(("h5", rectangle, map_visualize))
-        return map_visualize
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
 
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
         # you and the prison he is staying)
         pirate = minDistance(self.map, 'p')
         agent = minDistance(self.map, 'A')
-
+        return
         # verify hint 6
-        if pirate != -1 and agent != -1:
-            if len(pirate.preStep) > len(agent.preStep):
-                self.hint_list.append(("h6", True))  # agent is nearest T
-            else:
-                self.hint_list.append(("h6", False))  # otherwise
+        # if pirate != -1 and agent != -1:
+        #     if len(pirate.preStep) > len(agent.preStep):
+        #         self.hint_list.append(("h6", True))  # agent is nearest T
+        #     else:
+        #         self.hint_list.append(("h6", False))  # otherwise
 
     def hint_7(self):
         # A column and/or a row that contain the treasure (rare)
         row = random.randint(1, self.n-2)
         col = random.randint(1, self.n-2)
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
+        #map_visualize = np.zeros([self.n, self.n], dtype=bool)
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
-            map_visualize[row, ] = True
-            self.hint_list.append(("h7", ("r", row), map_visualize))
+            self.map[row, ]['mark'] = True
+            #map_visualize[row, ] = True
+            #self.hint_list.append(("h7", ("r", row), map_visualize))
         elif row_col == 1:
-            map_visualize[:, col] = True
-            self.hint_list.append(("h7", ("c", col), map_visualize))
+            self.map[:, col]['mark'] = True
+            # map_visualize[:, col] = True
+            # self.hint_list.append(("h7", ("c", col), map_visualize))
         else:
-            map_visualize[row, ] = True
-            map_visualize[:, col] = True
-            self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
-        return map_visualize
+            self.map[row, ]['mark'] = True
+            self.map[:, col]['mark'] = True
+        #     map_visualize[row, ] = True
+        #     map_visualize[:, col] = True
+        #     self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
+        # return map_visualize
 
     def hint_8(self):
         # A column and/or a row that do not contain the treasure.
         row = random.randint(1, self.n-2)
         col = random.randint(1, self.n-2)
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
+        #map_visualize = np.zeros([self.n, self.n], dtype=bool)
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
-            map_visualize[row, ] = True
-            self.hint_list.append(("h8", ("r", row), map_visualize))
+            self.map[row, ]['mark'] = True
+            #map_visualize[row, ] = True
+            #self.hint_list.append(("h7", ("r", row), map_visualize))
         elif row_col == 1:
-            map_visualize[:, col] = True
-            self.hint_list.append(("h8", ("c", col), map_visualize))
+            self.map[:, col]['mark'] = True
+            # map_visualize[:, col] = True
+            # self.hint_list.append(("h7", ("c", col), map_visualize))
         else:
-            map_visualize[row, ] = True
-            map_visualize[:, col] = True
-            self.hint_list.append(("h8", ("r_c", row, col), map_visualize))
+            self.map[row, ]['mark'] = True
+            self.map[:, col]['mark'] = True
+        #     map_visualize[row, ] = True
+        #     map_visualize[:, col] = True
+        #     self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
+        # return map_visualize
 
     def hint_9(self):
         # 2 regions that the treasure is somewhere in their boundary
@@ -146,6 +151,13 @@ class Hint:
 
     def hint_12(self):
         # A half of the map without treasure (rare)
+        half = random.randint(0,1)
+        if half == 0: #row half
+            col = self.n
+            row = int(self.n/2)
+        else:
+            row = self.n
+            col = int(self.n/2)
         if float(int(np.flatnonzero(np.core.defchararray.find(self.map, "T") != -1))/self.n) >= float(self.n/2):
             self.hint_list.append(("h12", False))  # half bot has T
         else:

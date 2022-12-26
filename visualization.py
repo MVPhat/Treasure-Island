@@ -119,8 +119,8 @@ class Visualization:
 
         self.chessboard(self.hint.map, self.SIZE)
 
-        if (verify):
-            self.chessboard(self.hint.verify(hint), self.SIZE)
+        # if (verify):
+        #     self.chessboard(self.hint.verify(hint), self.SIZE)
 
         self.screen.tracer(False)
         self.save_image('hint.eps')

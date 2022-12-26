@@ -83,45 +83,30 @@ class Hint:
         # A column and/or a row that contain the treasure (rare)
         row = random.randint(1, self.n-2)
         col = random.randint(1, self.n-2)
-        #map_visualize = np.zeros([self.n, self.n], dtype=bool)
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
             self.map[row, ]['mark'] = True
-            #map_visualize[row, ] = True
-            #self.hint_list.append(("h7", ("r", row), map_visualize))
+
         elif row_col == 1:
             self.map[:, col]['mark'] = True
-            # map_visualize[:, col] = True
-            # self.hint_list.append(("h7", ("c", col), map_visualize))
+
         else:
             self.map[row, ]['mark'] = True
             self.map[:, col]['mark'] = True
-        #     map_visualize[row, ] = True
-        #     map_visualize[:, col] = True
-        #     self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
-        # return map_visualize
+
 
     def hint_8(self):
         # A column and/or a row that do not contain the treasure.
         row = random.randint(1, self.n-2)
         col = random.randint(1, self.n-2)
-        #map_visualize = np.zeros([self.n, self.n], dtype=bool)
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
             self.map[row, ]['mark'] = True
-            #map_visualize[row, ] = True
-            #self.hint_list.append(("h7", ("r", row), map_visualize))
         elif row_col == 1:
             self.map[:, col]['mark'] = True
-            # map_visualize[:, col] = True
-            # self.hint_list.append(("h7", ("c", col), map_visualize))
         else:
             self.map[row, ]['mark'] = True
             self.map[:, col]['mark'] = True
-        #     map_visualize[row, ] = True
-        #     map_visualize[:, col] = True
-        #     self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
-        # return map_visualize
 
     def hint_9(self):
         # 2 regions that the treasure is somewhere in their boundary
@@ -142,22 +127,26 @@ class Hint:
             index_bot = self.n - 2
             index_left = 1
             index_right = self.n - 2
-
+        return
         # self.hint_list.append(("h11", random.random(2,3)))
 
     def hint_12(self):
         # A half of the map without treasure (rare)
         half = random.randint(0,1)
         if half == 0: #row half
-            col = self.n
-            row = int(self.n/2)
-        else:
-            row = self.n
-            col = int(self.n/2)
-        if float(int(np.flatnonzero(np.core.defchararray.find(self.map, "T") != -1))/self.n) >= float(self.n/2):
-            self.hint_list.append(("h12", False))  # half bot has T
-        else:
-            self.hint_list.append(("h12", True))  # half top has T
+            half = random.randint(0, 1)
+            if half == 0: #top half
+                self.map[0:(int(self.n/2 + 1))]['mark'] = True
+            else: 
+                self.map[int(self.n/2):(self.n)]['mark'] = True
+        
+        else: #col half
+            half = random.randint(0, 1)
+            if half == 0: #left half
+                self.map[:,0:int(self.n/2 + 1)]['mark'] = True
+            else:
+                self.map[:,int(self.n/2):self.n]['mark'] = True
+
 
     def hint_13(self):
         # From the center of the map/from the prison that he's staying, he tells

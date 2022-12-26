@@ -34,7 +34,7 @@ def readInputFile(filename):
 
 
 HINTS_NAME = [
-    # (1, "A list of random tiles that doesn't contain the treasure (1 to 12)"),
+    #(1, "A list of random tiles that doesn't contain the treasure (1 to 12)"),
     # (2, "2-5 regions that 1 of them has the treasure"),
     # (3, "1-3 regions that do not contain the treasure"),
     # (4, "A large rectangle area that has the treasure"),
@@ -45,8 +45,8 @@ HINTS_NAME = [
     # (9, "2 regions that the treasure is somewhere in their boundary"),
     # (10, 'The treasure is somewhere in a boundary of 2 regions'),
     # (11, 'The treasure is somewhere in an area bounded by 2-3 tiles from sea'),
-    (12, 'A half of the map without treasure (rare)'),
-    # (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
+    # (12, 'A half of the map without treasure (rare)'),
+     (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
     # (14, '2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)'),
     # (15, 'The treasure is in a region that has mountain'),
 ]

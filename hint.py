@@ -139,14 +139,14 @@ class Hint:
         if half == 0: #row half
             half = random.randint(0, 1)
             if half == 0: #top half
-                self.map[0:(int(self.n/2 + 1))]['mark'] = True
+                self.map[0:(int(self.n/2))]['mark'] = True
             else: 
                 self.map[int(self.n/2):(self.n)]['mark'] = True
         
         else: #col half
             half = random.randint(0, 1)
             if half == 0: #left half
-                self.map[:,0:int(self.n/2 + 1)]['mark'] = True
+                self.map[:,0:int(self.n/2)]['mark'] = True
             else:
                 self.map[:,int(self.n/2):self.n]['mark'] = True
 

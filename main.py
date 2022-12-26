@@ -56,7 +56,9 @@ for i in range(len(HINTS_NAME)):
     print(HINTS_NAME[i])
     visual = Visualization(width, height, Tx, Ty, map)
 
-    visual.visualize(f"h{i+1}", True)
+    visual.visualize(f"h{i+1}")
+
+    visual.verify(f"h{i+1}")
 
     visual.clear_mark()
 

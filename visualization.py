@@ -85,7 +85,7 @@ class Visualization:
                 value, dump, mark, ratio = self.map[i][j]
                 self.map[i][j] = (value, dump, False, ratio)
 
-    def visualize(self, hint, verify=False):
+    def visualize(self, hint):
         if (hint == 'h1'):
             self.hint.hint_1()
         elif (hint == 'h2'):
@@ -119,8 +119,12 @@ class Visualization:
 
         self.chessboard(self.hint.map, self.SIZE)
 
-        # if (verify):
-        #     self.chessboard(self.hint.verify(hint), self.SIZE)
+        self.screen.tracer(False)
+        self.save_image(f'{hint}_visual.eps')
+
+    def verify(self, hint):
+        self.hint.verify(hint)
+        self.chessboard(self.hint.map, self.SIZE)
 
         self.screen.tracer(False)
-        self.save_image('hint.eps')
+        self.save_image(f'{hint}_verify.eps')

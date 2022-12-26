@@ -157,9 +157,8 @@ class Hint:
         
         #treasure = list(*np.argwhere(self.map['type'] == 'T'))
         is_center_prison = random.choice(["center", "prison"])
-
+        direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
         if is_center_prison == "center":
-            direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
             if direction == 'SE':
                 self.map[0:int(self.n/2), 0:int(self.n/2)]['mark'] = True
             elif direction == 'SW':
@@ -184,7 +183,6 @@ class Hint:
                     end -= 1
                 
         else:
-            direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
             prison = self.find_prison_index()
 
 

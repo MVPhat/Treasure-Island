@@ -36,8 +36,8 @@ hint.print_hint_list()
 # hint.verify(hint.hint_list[1])
 # hint.verify(hint.hint_list[2])
 print("\n\n")
-print(hint.hint_list[6])
-hint.verify(hint.hint_list[6])
+#print(hint.hint_list[6])
+#hint.verify(hint.hint_list[6])
+print(hint.hint_list[4])
 
-
-# print(hint.mask_map)
+#print(hint.mask_map)

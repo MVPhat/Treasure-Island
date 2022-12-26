@@ -30,7 +30,7 @@ hint.hint_12()
 hint.hint_14()
 hint.hint_15()
 
-hint.print_hint_list()
+#hint.print_hint_list()
 
 # hint.verify(hint.hint_list[0])
 # hint.verify(hint.hint_list[1])
@@ -38,6 +38,6 @@ hint.print_hint_list()
 print("\n\n")
 #print(hint.hint_list[6])
 #hint.verify(hint.hint_list[6])
-print(hint.hint_list[4])
+print(hint.hint_list[4][2])
 
 #print(hint.mask_map)

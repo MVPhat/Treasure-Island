@@ -106,14 +106,14 @@ class Hint:
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
             map_visualize[row,] = True
-            self.hint_list.append(("h7", ("r", row, map_visualize)))
+            self.hint_list.append(("h7", ("r", row), map_visualize))
         elif row_col == 1:
             map_visualize[:,col] = True
-            self.hint_list.append(("h7", ("c", col, map_visualize)))
+            self.hint_list.append(("h7", ("c", col), map_visualize))
         else:
             map_visualize[row,] = True
             map_visualize[:,col] = True
-            self.hint_list.append(("h7", ("r_c", row, col, map_visualize)))
+            self.hint_list.append(("h7", ("r_c", row, col), map_visualize))
         return map_visualize
 
     def hint_8(self):
@@ -124,14 +124,14 @@ class Hint:
         row_col = random.randint(0, 2)  # 0: row, 1: col, 2: both
         if row_col == 0:
             map_visualize[row,] = True
-            self.hint_list.append(("h8", ("r", row, map_visualize)))
+            self.hint_list.append(("h8", ("r", row), map_visualize))
         elif row_col == 1:
             map_visualize[:,col] = True
-            self.hint_list.append(("h8", ("c", col, map_visualize)))
+            self.hint_list.append(("h8", ("c", col), map_visualize))
         else:
             map_visualize[row,] = True
             map_visualize[:,col] = True
-            self.hint_list.append(("h8", ("r_c", row, col, map_visualize)))
+            self.hint_list.append(("h8", ("r_c", row, col), map_visualize))
 
     def hint_9(self):
         # 2 regions that the treasure is somewhere in their boundary

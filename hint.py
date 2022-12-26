@@ -24,15 +24,18 @@ class Hint:
             cnt += 1
 
     def hint_2(self):
-        # 2-5 regions that 1 of them has the treasure.
-        print(self.map['ratio'])
         region_list = []
-        map_visualize = np.zeros([self.n, self.n], dtype=bool)
         for i in range(1, 7):
-            if str(i) in self.map['type']:
+            if i in self.map['region']:
                 region_list.append(i)
+
         region = random.sample(region_list, random.randint(2, 5))
-        print(region)
+
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.map[i][j]['region'] in region:
+                    self.map[i][j] = (self.map[i][j]['region'],
+                                      self.map[i][j]['type'], True, 1)
 
     def hint_3(self):
         # 1-3 regions that do not contain the treasure.
@@ -142,7 +145,7 @@ class Hint:
             index_left = 1
             index_right = self.n - 2
 
-        #self.hint_list.append(("h11", random.random(2,3)))
+        # self.hint_list.append(("h11", random.random(2,3)))
 
     def hint_12(self):
         # A half of the map without treasure (rare)
@@ -191,27 +194,24 @@ class Hint:
             ("h15", mountain_region[random.randint(0, len(mountain_region) - 1)]))
 
     def verify(self, choose):
-        isTrue = False
-        if choose == "h1":
-            for i in range(self.n):
-                for j in range(self.n):
-                    value, dump, visual, _ = self.map[i][j]
-                    if (visual):
-                        self.map[i][j] = (value, dump, True, 0)
-            return self.map
+        if choose == "h1" or choose == "h2" or choose == "h3":
+            dump = [str(self.map['type'][i][j]) + str(self.map['mark'][i][j])
+                    for i in range(self.n) for j in range(self.n)]
+            hint_res = 'TTrue' in dump
 
-        elif choose[0] == "h2" or choose[0] == "h3":
-            r = ""
-            for i in choose[1]:
-                if str(i) + "T" in self.map:
-                    isTrue = True
-                    r = str(i)
+            print(f'Hint {choose} is: {hint_res}')
+
             for i in range(self.n):
                 for j in range(self.n):
-                    if isTrue == True and r != "" and r != self.map[i][j][0]:
-                        self.mask_map[i][j] = False
-                    elif isTrue == False and r == "" and int(self.map[i][j][0]) in choose[1]:
-                        self.mask_map[i][j] = False
+                    value, dump, visual, ratio = self.map[i][j]
+                    if (ratio == 0):
+                        ratio = 0
+                    else:
+                        if not (visual ^ hint_res):
+                            ratio = 1
+                        else:
+                            ratio = 0
+                    self.map[i][j] = (value, dump, visual, ratio)
 
         elif choose[0] == "h4" or choose[0] == "h5":
             row = choose[1][0]
@@ -277,7 +277,7 @@ class Hint:
             return
         elif choose[0] == "h15":
             return
-        return isTrue
+        # return isTrue
 
     def print_hint_list(self):
         print()

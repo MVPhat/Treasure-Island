@@ -158,6 +158,7 @@ class Hint:
         #treasure = list(*np.argwhere(self.map['type'] == 'T'))
         is_center_prison = random.choice(["center", "prison"])
         direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
+
         if is_center_prison == "center":
             if direction == 'SE':
                 self.map[0:int(self.n/2), 0:int(self.n/2)]['mark'] = True
@@ -181,10 +182,56 @@ class Hint:
                         self.map[start:end, end - 1]['mark'] = True
                     start += 1
                     end -= 1
-                
         else:
             prison = self.find_prison_index()
+            if direction == 'SE':
+                self.map[0:(prison[0] + 1), 0:(prison[1] + 1)]['mark'] = True
+            elif direction == 'SW':
+                self.map[0:(prison[0] + 1), prison[1]:self.n]['mark'] = True
+            elif direction == 'NE':
+                self.map[prison[0]:self.n, 0:(prison[1] + 1)]['mark'] = True
+            elif direction == 'NW':
+                self.map[prison[0]:self.n, prison[1]:self.n]['mark'] = True
+            else:
+                row = prison[0]
+                col = prison[1]
+                self.map[row, col]['mark'] = True
+                layer = 1
+                while True:
+                    if direction == 'N':
+                        row += 1
+                        if row >= self.n:
+                            break
+                    elif direction == 'S':
+                        row -= 1
+                        if row < 0:
+                            break
+                    elif direction == 'E':
+                        col -= 1
+                        if col < 0:
+                            break
+                    else:
+                        col += 1
+                        if col >= self.n:
+                            break
 
+                    if direction == 'N' or direction == 'S':
+                        tmp_left = col - layer
+                        tmp_right = col + layer + 1
+                        if col - layer < 0:
+                            tmp_left = 0
+                        if col + layer + 1 > self.n:
+                            tmp_right = self.n
+                        self.map[row, tmp_left:tmp_right]['mark'] = True
+                    else:
+                        tmp_left = row - layer
+                        tmp_right = row + layer + 1
+                        if row - layer < 0:
+                            tmp_left = 0
+                        if row + layer + 1 > self.n:
+                            tmp_right = self.n
+                        self.map[tmp_left:tmp_right, col]['mark'] = True
+                    layer += 1
 
     def hint_14(self):
         # 2 squares that are different in size, the small one is placed inside the

@@ -1,5 +1,6 @@
 from visualization import Visualization
 import numpy as np
+from pirate import *
 
 EXAMPLE_FILE = "MAP_0.txt"
 
@@ -26,7 +27,7 @@ def readInputFile(filename):
                 map[i][j] = (int(map[i][j][0]), ' ' if map[i][j][1] ==
                              "\n" or map[i][j][1] == " " else map[i][j][1], False, 1)
     map = np.array(map, dtype=[
-                   ('region', np.short), ('type', 'U1'), ('mark', np.bool_), ('ratio', np.short)])
+                   ('region', np.short), ('type', 'U4'), ('mark', np.bool_), ('ratio', np.short)])
     return (int(width), int(height)), reveals, free, regions, (Tx, Ty), map
 
 
@@ -46,10 +47,18 @@ HINTS_NAME = [
     # (10, 'The treasure is somewhere in a boundary of 2 regions'),
     # (11, 'The treasure is somewhere in an area bounded by 2-3 tiles from sea'),
     # (12, 'A half of the map without treasure (rare)'),
-     (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
+    # (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
     # (14, '2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)'),
     # (15, 'The treasure is in a region that has mountain'),
 ]
+
+
+#random 1 prison
+prison_list = list(zip(*np.argwhere(map['type'] == 'P')))
+ranidx = random.randint(0, len(prison_list[0]) - 1)
+map[prison_list[0][ranidx]][prison_list[1][ranidx]]['type'] += 'p'
+
+print(minDistance(map, 'p'))
 
 
 for i in range(len(HINTS_NAME)):
@@ -64,3 +73,4 @@ for i in range(len(HINTS_NAME)):
     visual.clear_mark()
 
     map = visual.map
+

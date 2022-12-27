@@ -1,7 +1,6 @@
 import random
 import numpy as np
 
-
 def fill_region(array_map, n,  topl, topr, botl, botr):
     # topl
     while topl[0] >= 1 and topl[1] >= 1:

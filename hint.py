@@ -97,7 +97,6 @@ class Hint:
             self.map[row, ]['mark'] = True
             self.map[:, col]['mark'] = True
 
-
     def hint_8(self):
         # A column and/or a row that do not contain the treasure.
         row = random.randint(1, self.n-2)
@@ -113,43 +112,127 @@ class Hint:
 
     def hint_9(self):
         # 2 regions that the treasure is somewhere in their boundary
-        return
+        region_list = np.unique(self.map['region'])
+        region = random.randint(1, np.max(region_list))
+        neighbors = []
+        for i in range(self.n):
+            for j in range(self.n):
+                if (self.map['region'][i][j] == region):
+                    top = self.map['region'][i+1][j]
+                    if (top != region and top not in neighbors and top != 0):
+                        neighbors.append(top)
+                    bottom = self.map['region'][i-1][j]
+                    if (bottom != region and bottom not in neighbors and bottom != 0):
+                        neighbors.append(bottom)
+                    left = self.map['region'][i][j+1]
+                    if (left != region and left not in neighbors and left != 0):
+                        neighbors.append(left)
+                    right = self.map['region'][i][j-1]
+                    if (right != region and right not in neighbors and right != 0):
+                        neighbors.append(right)
+        neighbor = random.sample(list(neighbors), 1)[0]
+        for i in range(self.n):
+            for j in range(self.n):
+                if (self.map['region'][i][j] == region):
+                    top = self.map['region'][i+1][j]
+                    if (top == neighbor):
+                        self.map[i][j]['mark'] = True
+                        self.map[i+1][j]['mark'] = True
+                    bottom = self.map['region'][i-1][j]
+                    if (bottom == neighbor):
+                        self.map[i][j]['mark'] = True
+                        self.map[i-1][j]['mark'] = True
+                    left = self.map['region'][i][j+1]
+                    if (left == neighbor):
+                        self.map[i][j]['mark'] = True
+                        self.map[i][j+1]['mark'] = True
+                    right = self.map['region'][i][j-1]
+                    if (right == neighbor):
+                        self.map[i][j]['mark'] = True
+                        self.map[i][j-1]['mark'] = True
 
     def hint_10(self):
         # The treasure is somewhere in a boundary of 2 regions
-        return
+        region_list = np.unique(self.map['region'])
+        for region in range(1, np.max(region_list)):
+            neighbors = []
+            for i in range(self.n):
+                for j in range(self.n):
+                    if (self.map['region'][i][j] == region):
+                        top = self.map['region'][i+1][j]
+                        if (top != region and top not in neighbors and top != 0):
+                            neighbors.append(top)
+                        bottom = self.map['region'][i-1][j]
+                        if (bottom != region and bottom not in neighbors and bottom != 0):
+                            neighbors.append(bottom)
+                        left = self.map['region'][i][j+1]
+                        if (left != region and left not in neighbors and left != 0):
+                            neighbors.append(left)
+                        right = self.map['region'][i][j-1]
+                        if (right != region and right not in neighbors and right != 0):
+                            neighbors.append(right)
+            for neighbor in neighbors:
+                for i in range(self.n):
+                    for j in range(self.n):
+                        if (self.map['region'][i][j] == region):
+                            top = self.map['region'][i+1][j]
+                            if (top == neighbor):
+                                self.map[i][j]['mark'] = True
+                                self.map[i+1][j]['mark'] = True
+                            bottom = self.map['region'][i-1][j]
+                            if (bottom == neighbor):
+                                self.map[i][j]['mark'] = True
+                                self.map[i-1][j]['mark'] = True
+                            left = self.map['region'][i][j+1]
+                            if (left == neighbor):
+                                self.map[i][j]['mark'] = True
+                                self.map[i][j+1]['mark'] = True
+                            right = self.map['region'][i][j-1]
+                            if (right == neighbor):
+                                self.map[i][j]['mark'] = True
+                                self.map[i][j-1]['mark'] = True
 
     def hint_11(self):
         # The treasure is somewhere in an area bounded by 2-3 tiles from sea.
-        tiles = random.randint(2, 3)
-        cnt = [i for i in range(self.n)]
-        index = []
-
-        for i in range(tiles):
-            index_top = 1
-            index_bot = self.n - 2
-            index_left = 1
-            index_right = self.n - 2
-        return
+        bounded = random.randint(2, 3)
+        for i in range(self.n):
+            for j in range(self.n):
+                if (self.map['region'][i][j] == 0):
+                    for b in range(1, bounded + 1):
+                        if (i + b < self.n):
+                            top = self.map['region'][i+b][j]
+                            if (top != 0):
+                                self.map[i+b][j]['mark'] = True
+                        if (i-b > 0):
+                            bottom = self.map['region'][i-b][j]
+                            if (bottom != 0):
+                                self.map[i-b][j]['mark'] = True
+                        if (j + b < self.n):
+                            left = self.map['region'][i][j+b]
+                            if (left != 0):
+                                self.map[i][j+b]['mark'] = True
+                        if (j - b > 0):
+                            right = self.map['region'][i][j-b]
+                            if (right != 0):
+                                self.map[i][j-b]['mark'] = True
         # self.hint_list.append(("h11", random.random(2,3)))
 
     def hint_12(self):
         # A half of the map without treasure (rare)
-        half = random.randint(0,1)
-        if half == 0: #row half
+        half = random.randint(0, 1)
+        if half == 0:  # row half
             half = random.randint(0, 1)
-            if half == 0: #top half
+            if half == 0:  # top half
                 self.map[0:(int(self.n/2))]['mark'] = True
-            else: 
-                self.map[int(self.n/2):(self.n)]['mark'] = True
-        
-        else: #col half
-            half = random.randint(0, 1)
-            if half == 0: #left half
-                self.map[:,0:int(self.n/2)]['mark'] = True
             else:
-                self.map[:,int(self.n/2):self.n]['mark'] = True
+                self.map[int(self.n/2):(self.n)]['mark'] = True
 
+        else:  # col half
+            half = random.randint(0, 1)
+            if half == 0:  # left half
+                self.map[:, 0:int(self.n/2)]['mark'] = True
+            else:
+                self.map[:, int(self.n/2):self.n]['mark'] = True
 
     def hint_13(self):
         # From the center of the map/from the prison that he's staying, he tells

@@ -40,11 +40,11 @@ HINTS_NAME = [
     # (3, "1-3 regions that do not contain the treasure"),
     # (4, "A large rectangle area that has the treasure"),
     # (5, "A small rectangle area that doesn't has the treasure"),
-    # # (6, "He tells you that you are the nearest person to the treasure (between you and the prison he is staying)"),
+     (6, "He tells you that you are the nearest person to the treasure (between you and the prison he is staying)"),
     # (7, "A column and/or a row that contain the treasure (rare)"),
     # (8, "A column and/or a row that do not contain the treasure"),
     # (9, "2 regions that the treasure is somewhere in their boundary"),
-    (10, 'The treasure is somewhere in a boundary of 2 regions'),
+    # (10, 'The treasure is somewhere in a boundary of 2 regions'),
     # (11, 'The treasure is somewhere in an area bounded by 2-3 tiles from sea'),
     # (12, 'A half of the map without treasure (rare)'),
     # (13, 'From the center of the map/from the prison that he\'s staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)'),
@@ -58,7 +58,13 @@ prison_list = list(zip(*np.argwhere(map['type'] == 'P')))
 ranidx = random.randint(0, len(prison_list[0]) - 1)
 map[prison_list[0][ranidx]][prison_list[1][ranidx]]['type'] += 'p'
 
-print(minDistance(map, 'p'))
+#random agent
+while True:
+    agent = (random.randint(1, width - 2), random.randint(1, height - 2))
+    if (map[agent[0]][agent[1]]['type'] != 'P' and map[agent[0]][agent[1]]['type'] != 'M' and
+        map[agent[0]][agent[1]]['region'] != 0):
+        map[agent[0]][agent[1]]['type'] += 'A'
+        break
 
 
 for i in range(len(HINTS_NAME)):

@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from generate_map import minDistance
-
+from pirate import verify_hint6
 
 class Hint:
     def __init__(self, array_map, n):
@@ -71,15 +71,7 @@ class Hint:
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
         # you and the prison he is staying)
-        pirate = minDistance(self.map, 'p')
-        agent = minDistance(self.map, 'A')
         return
-        # verify hint 6
-        # if pirate != -1 and agent != -1:
-        #     if len(pirate.preStep) > len(agent.preStep):
-        #         self.hint_list.append(("h6", True))  # agent is nearest T
-        #     else:
-        #         self.hint_list.append(("h6", False))  # otherwise
 
     def hint_7(self):
         # A column and/or a row that contain the treasure (rare)
@@ -361,7 +353,17 @@ class Hint:
         if choose == 'h1' or choose == 'h3' or choose == 'h5' or choose == 'h8':
             hint_isPositive = False
         elif choose == 'h6':
+            #verify....
+            hint_res = True
+            agent = verify_hint6(self.map, 'A')
+            pirate = verify_hint6(self.map, 'p')  
+            if pirate[0] < agent[0]:
+                hint_res = False
+            print(f'==> Hint {choose} is: {hint_res}')
             return
+        elif choose == 'h13':
+            #verify....
+            print(f'==> Hint {choose} is: {hint_res}')
         else:
             hint_isPositive = True
 

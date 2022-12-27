@@ -1,5 +1,6 @@
 from visualization import Visualization
 import numpy as np
+from pirate import *
 
 EXAMPLE_FILE = "MAP_0.txt"
 
@@ -26,7 +27,7 @@ def readInputFile(filename):
                 map[i][j] = (int(map[i][j][0]), ' ' if map[i][j][1] ==
                              "\n" or map[i][j][1] == " " else map[i][j][1], False, 1)
     map = np.array(map, dtype=[
-                   ('region', np.short), ('type', 'U1'), ('mark', np.bool_), ('ratio', np.short)])
+                   ('region', np.short), ('type', 'U4'), ('mark', np.bool_), ('ratio', np.short)])
     return (int(width), int(height)), reveals, free, regions, (Tx, Ty), map
 
 
@@ -34,7 +35,7 @@ def readInputFile(filename):
 
 
 HINTS_NAME = [
-    # (1, "A list of random tiles that doesn't contain the treasure (1 to 12)"),
+    #(1, "A list of random tiles that doesn't contain the treasure (1 to 12)"),
     # (2, "2-5 regions that 1 of them has the treasure"),
     # (3, "1-3 regions that do not contain the treasure"),
     # (4, "A large rectangle area that has the treasure"),
@@ -52,6 +53,14 @@ HINTS_NAME = [
 ]
 
 
+#random 1 prison
+prison_list = list(zip(*np.argwhere(map['type'] == 'P')))
+ranidx = random.randint(0, len(prison_list[0]) - 1)
+map[prison_list[0][ranidx]][prison_list[1][ranidx]]['type'] += 'p'
+
+print(minDistance(map, 'p'))
+
+
 for i in range(len(HINTS_NAME)):
     num, name = HINTS_NAME[i]
     print(name)
@@ -64,3 +73,4 @@ for i in range(len(HINTS_NAME)):
     visual.clear_mark()
 
     map = visual.map
+

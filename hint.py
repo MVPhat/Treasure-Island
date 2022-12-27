@@ -23,7 +23,8 @@ class Hint:
 
     def hint_2(self):
         # 2-5 regions that 1 of them has the treasure.
-        region_list = np.unique(self.map['region'])
+        region_list = list(np.unique(self.map['region']))
+        region_list.pop(0)
         region = random.sample(list(region_list), random.randint(2, 5))
 
         for i in range(self.n):
@@ -34,12 +35,10 @@ class Hint:
 
     def hint_3(self):
         # 1-3 regions that do not contain the treasure.
-        region_list = []
-        for i in range(1, 7):
-            if i in self.map['region']:
-                region_list.append(i)
-
+        region_list = list(np.unique(self.map['region']))
+        region_list.pop(0)
         region = random.sample(region_list, random.randint(1, 3))
+
         for i in range(self.n):
             for j in range(self.n):
                 if self.map[i][j]['region'] in region:
@@ -238,7 +237,84 @@ class Hint:
         # From the center of the map/from the prison that he's staying, he tells
         # you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW)
         # (The shape of area when the hints are either W, E, N or S is triangle).
-        return
+        
+        #treasure = list(*np.argwhere(self.map['type'] == 'T'))
+        is_center_prison = random.choice(["center", "prison"])
+        direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
+
+        if is_center_prison == "center":
+            if direction == 'SE':
+                self.map[0:int(self.n/2), 0:int(self.n/2)]['mark'] = True
+            elif direction == 'SW':
+                self.map[0:int(self.n/2), int(self.n/2):self.n]['mark'] = True
+            elif direction == 'NE':
+                self.map[int(self.n/2):self.n, 0:int(self.n/2)]['mark'] = True
+            elif direction == 'NW':
+                self.map[int(self.n/2):self.n, int(self.n/2):self.n]['mark'] = True
+            else:
+                start = 0
+                end = self.n
+                while start != int(self.n/2):
+                    if direction == 'S':
+                        self.map[start][start:end]['mark'] = True
+                    elif direction == 'E':
+                        self.map[start:end, start]['mark'] = True
+                    elif direction == 'N':
+                        self.map[end - 1][start:end]['mark'] = True
+                    else: 
+                        self.map[start:end, end - 1]['mark'] = True
+                    start += 1
+                    end -= 1
+        else:
+            prison = self.find_prison_index()
+            if direction == 'SE':
+                self.map[0:(prison[0] + 1), 0:(prison[1] + 1)]['mark'] = True
+            elif direction == 'SW':
+                self.map[0:(prison[0] + 1), prison[1]:self.n]['mark'] = True
+            elif direction == 'NE':
+                self.map[prison[0]:self.n, 0:(prison[1] + 1)]['mark'] = True
+            elif direction == 'NW':
+                self.map[prison[0]:self.n, prison[1]:self.n]['mark'] = True
+            else:
+                row = prison[0]
+                col = prison[1]
+                self.map[row, col]['mark'] = True
+                layer = 1
+                while True:
+                    if direction == 'N':
+                        row += 1
+                        if row >= self.n:
+                            break
+                    elif direction == 'S':
+                        row -= 1
+                        if row < 0:
+                            break
+                    elif direction == 'E':
+                        col -= 1
+                        if col < 0:
+                            break
+                    else:
+                        col += 1
+                        if col >= self.n:
+                            break
+
+                    if direction == 'N' or direction == 'S':
+                        tmp_left = col - layer
+                        tmp_right = col + layer + 1
+                        if col - layer < 0:
+                            tmp_left = 0
+                        if col + layer + 1 > self.n:
+                            tmp_right = self.n
+                        self.map[row, tmp_left:tmp_right]['mark'] = True
+                    else:
+                        tmp_left = row - layer
+                        tmp_right = row + layer + 1
+                        if row - layer < 0:
+                            tmp_left = 0
+                        if row + layer + 1 > self.n:
+                            tmp_right = self.n
+                        self.map[tmp_left:tmp_right, col]['mark'] = True
+                    layer += 1
 
     def hint_14(self):
         # 2 squares that are different in size, the small one is placed inside the
@@ -248,30 +324,38 @@ class Hint:
             while True:
                 rectangle = random.sample(range(self.n), 4)
                 rectangle.sort()
-                if (rectangle[3] - rectangle[1]) >= int(self.n/3) and (rectangle[2] - rectangle[0]) >= int(self.n/3):
+                if (rectangle[3] - rectangle[1]) >= int(self.n/3) and (rectangle[2] - rectangle[0]) >= int(self.n/3) and (rectangle[2] - rectangle[0]) == (rectangle[3] - rectangle[1]):
                     break
             big = rectangle
 
             while True:
                 rectangle = random.sample(range(self.n), 4)
                 rectangle.sort()
-                if (rectangle[3] - rectangle[1]) <= int(self.n/5) and (rectangle[2] - rectangle[0]) <= int(self.n/5):
+                if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) == (rectangle[3] - rectangle[1]):
                     break
             small = rectangle
 
             if big[0] < small[0] and big[1] < small[1] and big[2] > small[2] and big[3] > small[3]:
-                self.hint_list.append(("h14", (big, small)))
+                for i in range(big[0], big[2] + 1):
+                    for j in range(big[1], big[3] + 1):
+                        if i >= small[0] and i <= small[2] and j >= small[1] and j <= small[3]:
+                            continue
+                        self.map[i][j]['mark'] = True
                 break
 
     def hint_15(self):
         # The treasure is in a region that has mountain
-        mountain_region = []
-        for i in range(self.n):
-            for j in range(self.n):
-                if 'M' in self.map[i][j] and self.map[i][j][0] not in mountain_region:
-                    mountain_region.append(self.map[i][j][0])
-        self.hint_list.append(
-            ("h15", mountain_region[random.randint(0, len(mountain_region) - 1)]))
+        region_list = list(np.unique(self.map['region']))
+        region_mountain = []
+        for r in range(self.n):
+            for c in range(self.n):
+                if self.map[r][c]['type'] == 'M' and self.map[r][c]['region'] in region_list and self.map[r][c]['region'] not in region_mountain:
+                    region_mountain.append(self.map[r][c]['region'])
+        pick_region = random.randint(0, len(region_list) - 1)
+        for r in range(self.n):
+            for c in range(self.n):
+                if self.map[r][c]['region'] == region_mountain[pick_region]:
+                    self.map[r][c]['mark'] = True
 
     def verify(self, choose):
         if choose == 'h1' or choose == 'h3' or choose == 'h5' or choose == 'h8':
@@ -303,3 +387,8 @@ class Hint:
         print()
         for i in self.hint_list:
             print(f"{i[0]}, {i[1]}", end='\n')
+
+    def find_prison_index(self):
+        prison_list = list(zip(*np.argwhere(self.map['type'] == 'P')))
+        ranidx = random.randint(0, len(prison_list[0]) - 1)
+        return (prison_list[0][ranidx], prison_list[1][ranidx])

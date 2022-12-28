@@ -1,8 +1,9 @@
 from visualization import Visualization
 from hint import Hint
 import numpy as np
-from pirate import *
+import random
 
+from pirate import minDistance
 EXAMPLE_FILE = "MAP_0.txt"
 
 

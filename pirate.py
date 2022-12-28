@@ -1,4 +1,4 @@
-from hint import *
+import numpy as np
 
 
 class Cell:
@@ -79,9 +79,6 @@ def isValid(x, y, array_map, visited):
     return False
 
 
-
-
-
 def verify_hint6(array_map, type):
     source = Cell(0, 0, 0, [])
 
@@ -150,6 +147,6 @@ def verify_hint6(array_map, type):
 def isValidHint6(x, y, array_map, visited):
     if ((x >= 0 and y >= 0) and
         (x < len(array_map) and y < len(array_map)) and
-        (visited[x][y] == False)):
+            (visited[x][y] == False)):
         return True
     return False

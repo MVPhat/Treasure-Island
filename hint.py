@@ -1,12 +1,14 @@
 import random
 import numpy as np
 from generate_map import minDistance
+from visualization import Visualization
 
 
 class Hint:
-    def __init__(self, array_map, n):
+    def __init__(self, array_map, n, hint):
         self.map = array_map
         self.n = n
+        self.hint = hint
 
     def hint_1(self):
         # A list of random tiles that doesn't contain the treasure (1 to 12).
@@ -52,8 +54,7 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) >= int(self.n/2) and (rectangle[2] - rectangle[0]) >= int(self.n/2):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
-                               :(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]                 :(rectangle[3] + 1)]['mark'] = True
         # map_visualize[rectangle[0]:(rectangle[2] + 1),
         #               rectangle[1]:(rectangle[3] + 1)] = True
         # self.hint_list.append(("h4", rectangle, map_visualize))
@@ -65,8 +66,7 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
-                               :(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]                 :(rectangle[3] + 1)]['mark'] = True
 
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
@@ -130,6 +130,7 @@ class Hint:
                     if (right != region and right not in neighbors and right != 0):
                         neighbors.append(right)
         neighbor = random.sample(list(neighbors), 1)[0]
+        # print(region, neighbor)
         for i in range(self.n):
             for j in range(self.n):
                 if (self.map['region'][i][j] == region):
@@ -237,7 +238,7 @@ class Hint:
         # From the center of the map/from the prison that he's staying, he tells
         # you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW)
         # (The shape of area when the hints are either W, E, N or S is triangle).
-        
+
         #treasure = list(*np.argwhere(self.map['type'] == 'T'))
         is_center_prison = random.choice(["center", "prison"])
         direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
@@ -250,7 +251,8 @@ class Hint:
             elif direction == 'NE':
                 self.map[int(self.n/2):self.n, 0:int(self.n/2)]['mark'] = True
             elif direction == 'NW':
-                self.map[int(self.n/2):self.n, int(self.n/2):self.n]['mark'] = True
+                self.map[int(self.n/2):self.n, int(self.n/2)
+                             :self.n]['mark'] = True
             else:
                 start = 0
                 end = self.n
@@ -261,7 +263,7 @@ class Hint:
                         self.map[start:end, start]['mark'] = True
                     elif direction == 'N':
                         self.map[end - 1][start:end]['mark'] = True
-                    else: 
+                    else:
                         self.map[start:end, end - 1]['mark'] = True
                     start += 1
                     end -= 1
@@ -357,11 +359,11 @@ class Hint:
                 if self.map[r][c]['region'] == region_mountain[pick_region]:
                     self.map[r][c]['mark'] = True
 
-    def verify(self, choose):
-        if choose == 'h1' or choose == 'h3' or choose == 'h5' or choose == 'h8':
+    def verify(self, turn, test=False):
+        if self.hint == 'h1' or self.hint == 'h3' or self.hint == 'h5' or self.hint == 'h8':
             hint_isPositive = False
-        elif choose == 'h6':
-            return
+        elif self.hint == 'h6':
+            return False
         else:
             hint_isPositive = True
 
@@ -369,7 +371,15 @@ class Hint:
                 for i in range(self.n) for j in range(self.n)]
         hint_res = not (('TTrue' in dump) ^ hint_isPositive)
 
-        print(f'==> Hint {choose} is: {hint_res}')
+        if (test and not hint_res):
+            return hint_res
+        if (test):
+            visual = Visualization(self.n, self.n, self.map)
+            filename = f'TURN[{turn}]_HINT[{self.hint}]_visual'
+            visual.visualize(filename)
+            print(f'\t\tHINT [visualization]: {filename}.eps')
+
+        print(f'\t\tHINT [verify]: {hint_res}')
 
         for i in range(self.n):
             for j in range(self.n):
@@ -383,8 +393,52 @@ class Hint:
                         ratio = 1 if (hint_res ^ visual) else 0
                 self.map[i][j] = (value, dump, visual, ratio)
 
+        visual = Visualization(self.n, self.n, self.map)
+        filename = f'TURN[{turn}]_HINT[{self.hint}]_verify'
+        visual.visualize(filename)
+        print(f'\t\tHINT [verify_visual]: {filename}.eps')
+
+        return hint_res
+
+    def visualize(self, turn, test=False):
+        if (self.hint == 'h1'):
+            self.hint_1()
+        elif (self.hint == 'h2'):
+            self.hint_2()
+        elif (self.hint == 'h3'):
+            self.hint_3()
+        elif (self.hint == 'h4'):
+            self.hint_4()
+        elif (self.hint == 'h5'):
+            self.hint_5()
+        # elif (hint == 'h6'):
+        #     self.hint_6()
+        elif (self.hint == 'h7'):
+            self.hint_7()
+        elif (self.hint == 'h8'):
+            self.hint_8()
+        elif (self.hint == 'h9'):
+            self.hint_9()
+        elif (self.hint == 'h10'):
+            self.hint_10()
+        elif (self.hint == 'h11'):
+            self.hint_11()
+        elif (self.hint == 'h12'):
+            self.hint_12()
+        elif (self.hint == 'h13'):
+            self.hint_13()
+        elif (self.hint == 'h14'):
+            self.hint_14()
+        elif (self.hint == 'h15'):
+            self.hint_15()
+
+        if (not test):
+            visual = Visualization(self.n, self.n, self.map)
+            filename = f'TURN[{turn}]_HINT[{self.hint}]_visual'
+            visual.visualize(filename)
+            print(f'\t\tHINT [visualization]: {filename}.eps')
+
     def print_hint_list(self):
-        print()
         for i in self.hint_list:
             print(f"{i[0]}, {i[1]}", end='\n')
 

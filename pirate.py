@@ -1,5 +1,6 @@
 from hint import *
 
+
 class Cell:
     def __init__(self, row, col, dist, preStep):
         self.row = row
@@ -29,7 +30,7 @@ def minDistance(array_map, type):
         source = queue.pop(0)
         # Destination found;
         if (array_map[source.row][source.col]['type'] == 'T'):
-            return source.dist, source.preStep
+            return source.dist, np.array(source.preStep)
 
         # moving up
         if isValid(source.row - 1, source.col, array_map, visited):

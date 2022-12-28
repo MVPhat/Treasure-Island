@@ -233,7 +233,8 @@ class Hint:
         #treasure = list(*np.argwhere(self.map['type'] == 'T'))
         is_center_prison = random.choice(["center", "prison"])
         direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
-
+        is_center_prison = 'prison'
+        direction = 'S'
         if is_center_prison == "center":
             if direction == 'SE':
                 self.map[0:int(self.n/2), 0:int(self.n/2)]['mark'] = True
@@ -259,6 +260,8 @@ class Hint:
                     end -= 1
         else:
             prison = self.find_prison_index()
+            self.pri_r = prison[0]
+            self.pri_c = prison[1]
             if direction == 'SE':
                 self.map[0:(prison[0] + 1), 0:(prison[1] + 1)]['mark'] = True
             elif direction == 'SW':
@@ -307,6 +310,8 @@ class Hint:
                             tmp_right = self.n
                         self.map[tmp_left:tmp_right, col]['mark'] = True
                     layer += 1
+        self.is_center_prison = is_center_prison
+        self.direction = direction
 
     def hint_14(self):
         # 2 squares that are different in size, the small one is placed inside the
@@ -362,8 +367,9 @@ class Hint:
             print(f'==> Hint {choose} is: {hint_res}')
             return
         elif choose == 'h13':
-            #verify....
+            hint_res = self.verify_hint13()
             print(f'==> Hint {choose} is: {hint_res}')
+            return
         else:
             hint_isPositive = True
 
@@ -394,3 +400,82 @@ class Hint:
         prison_list = list(zip(*np.argwhere(self.map['type'] == 'P')))
         ranidx = random.randint(0, len(prison_list[0]) - 1)
         return (prison_list[0][ranidx], prison_list[1][ranidx])
+    
+    def verify_hint13(self):
+        hint_res = False
+        if self.is_center_prison == 'center':
+            start = int(self.n/4)
+            end = self.n - int(self.n/4) - 1
+            if self.direction == 'W':
+                if 'T' in self.map[start:end, 0:int(self.n/2)]['type']:
+                    hint_res = True
+            elif self.direction == 'E':
+                if 'T' in self.map[start:end, int(self.n/2):self.n]['type']:
+                    hint_res = True
+            elif self.direction == 'S':
+                if 'T' in self.map[int(self.n/2):self.n, start:end + 1]['type']:
+                    hint_res = True
+            elif self.direction == 'N':
+                if 'T' in self.map[0:int(self.n/2), start:end + 1]['type']:
+                    hint_res = True
+            elif self.direction == 'NE':
+                diagonal = list(np.fliplr(self.map['type']).diagonal())
+                for i in range(int(self.n/2)):
+                    diagonal.pop(len(diagonal) - 1)
+                if 'T' in diagonal:
+                    hint_res = True
+            elif self.direction == 'SW':
+                diagonal = list(np.fliplr(self.map['type']).diagonal())
+                for i in range(int(self.n/2)):
+                    diagonal.pop(0)
+                if 'T' in diagonal:
+                    hint_res = True
+            elif self.direction == 'SE':
+                diagonal = list(self.map['type'].diagonal())
+                for i in range(int(self.n/2)):
+                    diagonal.pop(0)
+                if 'T' in diagonal:
+                    hint_res = True
+            elif self.direction == 'NW':
+                diagonal = list(self.map['type'].diagonal())
+                for i in range(int(self.n/2)):
+                    diagonal.pop(len(diagonal) - 1)
+                if 'T' in diagonal:
+                    hint_res = True
+        else:
+            start = self.pri_r - int(self.n/8)
+            end = self.pri_r + int(self.n/8)
+            if self.direction == 'W':
+                if 'T' in self.map[start:end + 1, 0:self.pri_c + 1]['type']:
+                    hint_res = True
+            elif self.direction == 'E':
+                if 'T' in self.map[start:end + 1, self.pri_c:self.n]['type']:
+                    hint_res = True
+            start = self.pri_c - int(self.n/8)
+            end = self.pri_c + int(self.n/8)
+            if self.direction == 'N':
+                if 'T' in self.map[0:self.pri_r + 1, start:end + 1]['type']:
+                    hint_res = True
+            elif self.direction == 'S':
+                if 'T' in self.map[self.pri_r:self.n, start:end + 1]['type']:
+                    hint_res = True
+            else:
+                i = self.pri_r
+                j = self.pri_c
+                while i >= 0 and j >= 0 and i < self.n and j < self.n:
+                    if self.map[i][j]['type'] == 'T':
+                        hint_res = True
+                        break
+                    if self.direction == 'SE':
+                        i += 1
+                        j += 1
+                    elif self.direction == 'SW':
+                        i += 1
+                        j -= 1
+                    elif self.direction == 'NW':
+                        i -= 1
+                        j -= 1
+                    elif self.direction == 'NE':
+                        i -= 1
+                        j += 1
+        return hint_res

@@ -2,8 +2,10 @@ from visualization import Visualization
 from hint import Hint
 import numpy as np
 import random
-
+import time
 from pirate import minDistance
+from agent import AgentFind
+
 EXAMPLE_FILE = "MAP_0.txt"
 
 
@@ -86,6 +88,8 @@ map[prison_list[0][ranIdx]][prison_list[1][ranIdx]]['type'] += 'p'
 
 piratePos = (prison_list[0][ranIdx], prison_list[1][ranIdx])
 
+
+
 while True:
     turn += 1
 
@@ -153,6 +157,9 @@ while True:
     else:
         hint = Hint(map, width, hint=f'h{num}')
         hint.visualize(turn=turn)
+
+        #time.sleep(15)
+        #print(AgentFind(map, (Ax, Ay)))
         # if (hint_verify):
 
     print(f'\t\tHINT [{num}][name]: {name}')

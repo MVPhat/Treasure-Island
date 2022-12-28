@@ -349,7 +349,7 @@ class Hint:
             for c in range(self.n):
                 if self.map[r][c]['type'] == 'M' and self.map[r][c]['region'] in region_list and self.map[r][c]['region'] not in region_mountain:
                     region_mountain.append(self.map[r][c]['region'])
-        pick_region = random.randint(0, len(region_list) - 1)
+        pick_region = random.randint(0, len(region_mountain) - 1)
         for r in range(self.n):
             for c in range(self.n):
                 if self.map[r][c]['region'] == region_mountain[pick_region]:

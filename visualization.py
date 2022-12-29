@@ -1,4 +1,7 @@
 from turtle import Screen, Turtle
+import turtle
+
+from PIL import Image
 
 
 class Visualization:
@@ -6,8 +9,8 @@ class Visualization:
         self.map = map
         self.width = width
         self.height = height
-        self.FONT_SIZE = 14
-        self.SIZE = 40
+        self.FONT_SIZE = 14 if width == 16 else 8
+        self.SIZE = 40 if width == 16 else 24
         self.FONT = ('Arial', self.FONT_SIZE, 'normal')
         self.FONT_BOLD = ('Arial', self.FONT_SIZE, 'bold')
         self.COLORS = [(111, 168, 220), (255, 242, 204), (217, 210, 233),
@@ -27,7 +30,9 @@ class Visualization:
         self.marker.penup()
         self.marker.hideturtle()
 
-        self.screen.tracer(False)  # because I have no patience
+        self.screen.tracer(0)  # because I have no patience
+        turtle.speed('fastest')
+        self.screen.resetscreen()
 
     def square(self, size, color, mark):
         ''' draw and fill one square '''
@@ -101,15 +106,19 @@ class Visualization:
                                       align='center', font=self.FONT)
             self.greg.goto(-size * self.height/2, size *
                            self.width/2 - size * (i + 1))
+        self.screen.update()
 
     def save_image(self, filename):
         ts = self.greg.getscreen()
-        ts.getcanvas().postscript(file=filename)
+        ts.getcanvas().postscript(file=f'{filename}.eps')
+        img = Image.open(filename + '.eps')
+        img.save(filename + '.png', 'png')
+        # img.show()
 
     def clear_mark(self):
         self.map['mark'] = False
 
     def visualize(self, filename):
         self.chessboard(self.map, self.SIZE)
-        self.screen.tracer(False)
-        self.save_image(f'{filename}.eps')
+        # self.screen.tracer(False)
+        self.save_image(filename)

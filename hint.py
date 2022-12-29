@@ -56,7 +56,8 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) >= int(self.n/2) and (rectangle[2] - rectangle[0]) >= int(self.n/2):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
+                               :(rectangle[3] + 1)]['mark'] = True
         # map_visualize[rectangle[0]:(rectangle[2] + 1),
         #               rectangle[1]:(rectangle[3] + 1)] = True
         # self.hint_list.append(("h4", rectangle, map_visualize))
@@ -68,7 +69,8 @@ class Hint:
             rectangle.sort()
             if (rectangle[3] - rectangle[1]) <= int(self.n/3) and (rectangle[2] - rectangle[0]) <= int(self.n/3):
                 break
-        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]:(rectangle[3] + 1)]['mark'] = True
+        self.map[rectangle[0]:(rectangle[2] + 1), rectangle[1]
+                               :(rectangle[3] + 1)]['mark'] = True
 
     def hint_6(self):
         # He tells you that you are the nearest person to the treasure (between
@@ -245,7 +247,7 @@ class Hint:
             elif direction == 'NE':
                 self.map[int(self.n/2):self.n, 0:int(self.n/2)]['mark'] = True
             elif direction == 'NW':
-                self.map[int(self.n/2):self.n, int(self.n/2)                         :self.n]['mark'] = True
+                self.map[int(self.n/2):self.n, int(self.n/2):self.n]['mark'] = True
             else:
                 start = 0
                 end = self.n
@@ -382,7 +384,7 @@ class Hint:
         hint_res = not (('TTrue' in dump) ^ hint_isPositive)
 
         if (test and not hint_res):
-            return hint_res, list_log
+            return hint_res, list_log, (line + 1)
         if (test):
             visual = Visualization(self.n, self.n, self.map)
             filename = f'TURN[{turn}]_HINT[{self.hint}]_visual'
@@ -402,7 +404,6 @@ class Hint:
                     else:
                         ratio = 1 if (hint_res ^ visual) else 0
                 self.map[i][j] = (value, dump, visual, ratio)
-
         visual = Visualization(self.n, self.n, self.map)
         filename = f'TURN[{turn}]_HINT[{self.hint}]_verify'
         visual.visualize(filename)
@@ -422,7 +423,7 @@ class Hint:
         elif (self.hint == 'h5'):
             self.hint_5()
         elif (self.hint == 'h6'):
-             self.hint_6()
+            self.hint_6()
         elif (self.hint == 'h7'):
             self.hint_7()
         elif (self.hint == 'h8'):

@@ -6,8 +6,9 @@ import time
 from pirate import minDistance
 from agent import AgentFind
 
-EXAMPLE_FILE = "MAP_0.txt"
-TEST_CASE = "LOG_0.txt"
+EXAMPLE_FILE = "MAP_1.txt"
+TEST_CASE = "LOG_1.txt"
+
 
 def readInputFile(filename):
     with open(filename, "r") as f:
@@ -156,7 +157,8 @@ while True:
         while True:
             hint = Hint(map, width, hint=f'h{num}')
             hint.visualize(test=True, turn=turn)
-            res, list_log, line = hint.verify(test=True, turn=turn, list_log=list_log, line=line)
+            res, list_log, line = hint.verify(
+                test=True, turn=turn, list_log=list_log, line=line)
             # print('==> Test hint', num, res)
 
             if (res):
@@ -167,7 +169,7 @@ while True:
     else:
         hint = Hint(map, width, hint=f'h{num}')
         hint.visualize(turn=turn)
-        
+
         # time.sleep(15)
         # if (hint_verify):
 
@@ -187,7 +189,8 @@ while True:
         list_log.append(f"\tAGENT [action][{i+1}]")
         line += 1
         if i == 0:
-            _, list_log, line = hint.verify(turn=turn, list_log=list_log, line=line)
+            _, list_log, line = hint.verify(
+                turn=turn, list_log=list_log, line=line)
         # if (turn == reveal):
         #     map[x][y]['type'] = map[x][y]['type'][:-1]
         #     x = prison_list[0][ranIdx]
@@ -196,23 +199,22 @@ while True:
         #     print(f'\tAGENT [pos]: ({x}, {y})')
 
     map = hint.map
-    HINTS_NAME.remove((num, name))
+    # HINTS_NAME.remove((num, name))
 
     # print(AgentFind(map, (Ax, Ay)))
+
 
 def save_file_log():
     f = open(TEST_CASE, 'w')
     f.write(str(line) + '\n')
     if isWin:
         f.write("WIN\n")
-    else: f.write("LOSE\n")
+    else:
+        f.write("LOSE\n")
     for i in list_log:
         f.write(i + '\n')
 
     f.close()
 
+
 save_file_log()
-
-
-
-

@@ -7,7 +7,7 @@ from pirate import minDistance
 from agent import AgentFind
 
 EXAMPLE_FILE = "MAP_0.txt"
-
+TEST_CASE = "LOG_0.txt"
 
 def readInputFile(filename):
     with open(filename, "r") as f:
@@ -88,12 +88,16 @@ map[prison_list[0][ranIdx]][prison_list[1][ranIdx]]['type'] += 'p'
 
 piratePos = (prison_list[0][ranIdx], prison_list[1][ranIdx])
 
-
+isWin = False
+line = 0
+list_log = []
 
 while True:
     turn += 1
 
     print(f'TURN [{turn}]')
+    list_log.append(f'TURN [{turn}]')
+    line += 1
 
     visual = Visualization(width=width, height=height, map=map)
 
@@ -105,11 +109,14 @@ while True:
 
     if turn == reveal:
         print(f"\tPIRATE [reveal]: {reveal == turn}")
+        list_log.append(f"\tPIRATE [reveal]: {reveal == turn}")
+        line += 1
 
     if turn >= free:
         if turn == free:
             print(f"\tPIRATE [free]: {free == turn}")
-
+            list_log.append(f"\tPIRATE [free]: {free == turn}")
+            line += 1
             _, pirateMoves = minDistance(map, 'p')
 
         Px, Py = piratePos
@@ -122,6 +129,8 @@ while True:
         if (np.all((Tx, Ty) == piratePos) or len(pirateMoves) == 0):
             map[Tx][Ty]['type'] += 'p'
             print("\tPIRATE [win]")
+            list_log.append("\tPIRATE [win]")
+            line += 1
             break
 
         piratePos = pirateMoves[0]
@@ -131,6 +140,8 @@ while True:
 
     print(
         f"\tPIRATE [pos]: {piratePos} ")
+    list_log.append(f"\tPIRATE [pos]: {piratePos} ")
+    line += 1
 
     hint = random.randint(1, len(HINTS_NAME))
     num, name = HINTS_NAME[hint - 1]
@@ -145,8 +156,7 @@ while True:
         while True:
             hint = Hint(map, width, hint=f'h{num}')
             hint.visualize(test=True, turn=turn)
-            res = hint.verify(test=True, turn=turn)
-
+            res, list_log, line = hint.verify(test=True, turn=turn, list_log=list_log, line=line)
             # print('==> Test hint', num, res)
 
             if (res):
@@ -157,24 +167,27 @@ while True:
     else:
         hint = Hint(map, width, hint=f'h{num}')
         hint.visualize(turn=turn)
-
-        #time.sleep(15)
-        #print(AgentFind(map, (Ax, Ay)))
+        
+        # time.sleep(15)
         # if (hint_verify):
 
     print(f'\t\tHINT [{num}][name]: {name}')
-
+    list_log.append(f'\t\tHINT [{num}][name]: {name}')
     # print(visual.map[visual.map['mark']])
 
     print(f'\tAGENT [pos]: ({Ax}, {Ay})')
+    list_log.append(f'\tAGENT [pos]: ({Ax}, {Ay})')
+    line += 2
 
     if 'A' not in map[Ax][Ay]['type']:
         map[Ax][Ay]['type'] += 'A'
 
     for i in range(2):
         print(f"\tAGENT [action][{i+1}]")
+        list_log.append(f"\tAGENT [action][{i+1}]")
+        line += 1
         if i == 0:
-            hint.verify(turn=turn)
+            _, list_log, line = hint.verify(turn=turn, list_log=list_log, line=line)
         # if (turn == reveal):
         #     map[x][y]['type'] = map[x][y]['type'][:-1]
         #     x = prison_list[0][ranIdx]
@@ -184,3 +197,22 @@ while True:
 
     map = hint.map
     HINTS_NAME.remove((num, name))
+
+    # print(AgentFind(map, (Ax, Ay)))
+
+def save_file_log():
+    f = open(TEST_CASE, 'w')
+    f.write(str(line) + '\n')
+    if isWin:
+        f.write("WIN\n")
+    else: f.write("LOSE\n")
+    for i in list_log:
+        f.write(i + '\n')
+
+    f.close()
+
+save_file_log()
+
+
+
+

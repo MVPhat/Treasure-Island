@@ -1,17 +1,37 @@
 import random
 
 def gen_area(map, n):
-    isTreasure = False
-    area = []
-    while isTreasure == False:
-        area = random.sample(range(n), 4)
-        area.sort()
-        if (area[3] - area[1]) <= int(n/3) and (area[2] - area[0]) <= int(n/3):
-            for i in range(area[0], area[2] + 1):
-                for j in range(area[1], area[3] + 1):
-                    if 'T' in map[i][j]['type']:
-                        isTreasure = True
-    return (int(area[2]/2 + 1), int(area[3]/2 + 1))
+    # area = []
+    # best_area = []
+    # while len(best_area) == 0:
+    #     times = 100
+    #     cur_cnt = 0
+    #     next_cnt = 0
+    #     while times != 0:
+    #         area = random.sample(range(n), 4)
+    #         area.sort()
+    #         if (area[3] - area[1]) <= int(n/3) and (area[2] - area[0]) <= int(n/3):
+    #             for i in range(area[0], area[2] + 1):
+    #                 for j in range(area[1], area[3] + 1):
+    #                     if map[i][j]['mark'] == False:
+    #                         next_cnt += 1
+    #             if next_cnt > cur_cnt:
+    #                 best_area = area.copy()
+    #                 cur_cnt = next_cnt
+    #             times -= 1
+    # return (int(best_area[2]/2 + 1), int(best_area[3]/2 + 1)) 
+    # if len(best_area) > 0 else 1
+    index = []
+    for i in range(len(map)):
+        for j in range(len(map)):
+            if map[i][j]['mark'] == True:
+              index.append((i,j))
+    sumrow = 0
+    sumcol = 0
+    for i in range(len(index)):
+        sumrow += index[i][0]
+        sumcol += index[i][1]
+    return (int(sumrow/len(index)), int(sumcol/len(index)))
 
 class Cell:
     def __init__(self, row, col, dist, preStep):

@@ -9,6 +9,8 @@ class Hint:
         self.map = array_map
         self.n = n
         self.hint = hint
+        self.is_center_prison = ''
+        self.direction = ''
 
     def hint_1(self):
         # A list of random tiles that doesn't contain the treasure (1 to 12).
@@ -234,7 +236,6 @@ class Hint:
         #treasure = list(*np.argwhere(self.map['type'] == 'T'))
         is_center_prison = random.choice(["center", "prison"])
         direction = random.choice(["W", "E", "N", "S", "SE", "SW", "NE", "NW"])
-        is_center_prison = 'prison'
         direction = 'S'
         if is_center_prison == "center":
             if direction == 'SE':
@@ -355,7 +356,7 @@ class Hint:
                 if self.map[r][c]['region'] == region_mountain[pick_region]:
                     self.map[r][c]['mark'] = True
 
-    def verify(self, turn, test=False):
+    def verify(self, turn, list_log, line, test=False):
         if self.hint == 'h1' or self.hint == 'h3' or self.hint == 'h5' or self.hint == 'h8':
             hint_isPositive = False
         elif self.hint == 'h6':
@@ -365,12 +366,14 @@ class Hint:
             pirate = verify_hint6(self.map, 'p')
             if pirate[0] < agent[0]:
                 hint_res = False
-            print(f'==> Hint {self.hint} is: {hint_res}')
-            return
+                print(f'\t\tHINT [verify]: {hint_res}')
+                list_log.append(f'\t\tHINT [verify]: {hint_res}')
+            return hint_res, list_log, (line + 1)
         elif self.hint == 'h13':
             hint_res = self.verify_hint13()
-            print(f'==> Hint {self.hint} is: {hint_res}')
-            return
+            print(f'\t\tHINT [verify]: {hint_res}')
+            list_log.append(f'\t\tHINT [verify]: {hint_res}')
+            return hint_res, list_log, (line + 1)
         else:
             hint_isPositive = True
 
@@ -379,7 +382,7 @@ class Hint:
         hint_res = not (('TTrue' in dump) ^ hint_isPositive)
 
         if (test and not hint_res):
-            return hint_res
+            return hint_res, list_log
         if (test):
             visual = Visualization(self.n, self.n, self.map)
             filename = f'TURN[{turn}]_HINT[{self.hint}]_visual'
@@ -387,7 +390,7 @@ class Hint:
             print(f'\t\tHINT [visualization]: {filename}.eps')
 
         print(f'\t\tHINT [verify]: {hint_res}')
-
+        list_log.append(f'\t\tHINT [verify]: {hint_res}')
         for i in range(self.n):
             for j in range(self.n):
                 value, dump, visual, ratio = self.map[i][j]
@@ -405,7 +408,7 @@ class Hint:
         visual.visualize(filename)
         print(f'\t\tHINT [verify_visual]: {filename}.eps')
 
-        return hint_res
+        return hint_res, list_log, (line + 1)
 
     def visualize(self, turn, test=False):
         if (self.hint == 'h1'):
@@ -418,8 +421,8 @@ class Hint:
             self.hint_4()
         elif (self.hint == 'h5'):
             self.hint_5()
-        # elif (hint == 'h6'):
-        #     self.hint_6()
+        elif (self.hint == 'h6'):
+             self.hint_6()
         elif (self.hint == 'h7'):
             self.hint_7()
         elif (self.hint == 'h8'):

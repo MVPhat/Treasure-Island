@@ -13,10 +13,13 @@ def minDistance(array_map, type):
     source = Cell(0, 0, 0, [])
 
     # Finding the source to start from
-    treasure = list(*np.argwhere(array_map['type'] == 'Pp'))
-    source.row = treasure[0]
-    source.col = treasure[1]
-    source.preStep.append((source.row, source.col))
+    for i in range(len(array_map)):
+        for j in range(len(array_map)):
+            if type in array_map[i][j]['type']:
+                source.row = i
+                source.col = j
+                source.preStep.append((source.row, source.col))
+                break
 
     # To maintain location visit status
     visited = [[False for _ in range(len(array_map[0]))]
@@ -102,7 +105,7 @@ def verify_hint6(array_map, type):
     while len(queue) != 0:
         source = queue.pop(0)
         # Destination found;
-        if (array_map[source.row][source.col]['type'] == 'T'):
+        if ('T' in array_map[source.row][source.col]['type']):
             return source.dist, source.preStep
 
         # moving up

@@ -1,0 +1,63 @@
+61
+LOSE
+TURN [1]
+	PIRATE [pos]: (12, 13) 
+		HINT [verify]: True
+		HINT [5][name]: A small rectangle area that doesn't has the treasure
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [2]
+	PIRATE [reveal]: True
+	PIRATE [pos]: (12, 13) 
+		HINT [9][name]: 2 regions that the treasure is somewhere in their boundary
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: False
+	AGENT [action][2]
+TURN [3]
+	PIRATE [pos]: (12, 13) 
+		HINT [7][name]: A column and/or a row that contain the treasure (rare)
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: False
+	AGENT [action][2]
+TURN [4]
+	PIRATE [free]: True
+	PIRATE [pos]: [10 13] 
+		HINT [3][name]: 1-3 regions that do not contain the treasure
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [5]
+	PIRATE [pos]: [ 8 13] 
+		HINT [15][name]: The treasure is in a region that has mountain
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [6]
+	PIRATE [pos]: [ 7 12] 
+		HINT [12][name]: A half of the map without treasure (rare)
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [7]
+	PIRATE [pos]: [ 7 10] 
+		HINT [14][name]: 2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [8]
+	PIRATE [pos]: [ 5 10] 
+		HINT [8][name]: A column and/or a row that do not contain the treasure
+	AGENT [pos]: (5, 9)
+	AGENT [action][1]
+		HINT [verify]: True
+	AGENT [action][2]
+TURN [9]
+	PIRATE [win]

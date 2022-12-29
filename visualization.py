@@ -1,5 +1,6 @@
 from turtle import Screen, Turtle
 import turtle
+import os
 
 from PIL import Image
 
@@ -108,6 +109,10 @@ class Visualization:
         self.screen.update()
 
     def save_image(self, filename):
+        if not os.path.exists('./png'):
+            os.mkdir('./png')
+        if not os.path.exists('./eps'):
+            os.mkdir('./eps')
         ts = self.greg.getscreen()
         ts.getcanvas().postscript(file=f'./eps/{filename}.eps')
         img = Image.open(f'./eps/{filename}.eps')

@@ -32,7 +32,6 @@ class Visualization:
 
         self.screen.tracer(0)  # because I have no patience
         turtle.speed('fastest')
-        self.screen.resetscreen()
 
     def square(self, size, color, mark):
         ''' draw and fill one square '''
@@ -110,9 +109,9 @@ class Visualization:
 
     def save_image(self, filename):
         ts = self.greg.getscreen()
-        ts.getcanvas().postscript(file=f'{filename}.eps')
-        img = Image.open(filename + '.eps')
-        img.save(filename + '.png', 'png')
+        ts.getcanvas().postscript(file=f'./eps/{filename}.eps')
+        img = Image.open(f'./eps/{filename}.eps')
+        img.save(f'./png/{filename}.png', 'png')
         # img.show()
 
     def clear_mark(self):

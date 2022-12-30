@@ -96,7 +96,7 @@ class Visualization:
                 if (dump == "P" or dump == "T"):
                     self.marker.write(f"{area}{dump}",
                                       align='center', font=self.FONT_BOLD)
-                elif 'p' in dump and dump != " ":
+                elif ('p' in dump and dump != " ") or ('A' in dump and dump != ' '):
                     self.marker.pencolor('red')
                     self.marker.write(f"{area}{dump}",
                                       align='center', font=self.FONT_BOLD)

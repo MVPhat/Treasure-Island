@@ -1,5 +1,6 @@
 import random
 
+
 def gen_area(map, n):
     # area = []
     # best_area = []
@@ -19,19 +20,20 @@ def gen_area(map, n):
     #                 best_area = area.copy()
     #                 cur_cnt = next_cnt
     #             times -= 1
-    # return (int(best_area[2]/2 + 1), int(best_area[3]/2 + 1)) 
+    # return (int(best_area[2]/2 + 1), int(best_area[3]/2 + 1))
     # if len(best_area) > 0 else 1
     index = []
     for i in range(len(map)):
         for j in range(len(map)):
             if map[i][j]['mark'] == True:
-              index.append((i,j))
+                index.append((i, j))
     sumrow = 0
     sumcol = 0
     for i in range(len(index)):
         sumrow += index[i][0]
         sumcol += index[i][1]
     return (int(sumrow/len(index)), int(sumcol/len(index)))
+
 
 class Cell:
     def __init__(self, row, col, dist, preStep):
@@ -50,7 +52,7 @@ def AgentFind(array_map, agentPos):
     # Finding the source to start from
     source.row, source.col = agentPos
     source.preStep.append((source.row, source.col))
-    
+
     # To maintain location visit status
     visited = [[False for _ in range(len(array_map[0]))]
                for _ in range(len(array_map))]
@@ -107,3 +109,63 @@ def isValid(x, y, array_map, visited):
         return True
     return False
 
+
+class Agent:
+    def __init__(self, Ax, Ay, map) -> None:
+        self.map = map
+        self.Ax = Ax
+        self.Ay = Ay
+
+    def updateMap(self, map):
+        self.map = map
+
+    def updateAgentPos(self, Ax, Ay):
+        self.map[self.Ax][self.Ay]['type'] = ''.join(
+            self.map[self.Ax][self.Ay]['type'].split('A'))
+        self.Ax = Ax
+        self.Ay = Ay
+        if 'A' not in self.map[Ax][Ax]['type']:
+            self.map[Ax][Ay]['type'] += 'A'
+            return self.map
+
+    def agentScan(self, type_scan):
+        scan = 3 if type_scan == 'small' else 5
+        for i in range(scan):
+            for j in range(scan):
+                if self.map['type'][self.Ax - 1 + i][self.Ay - 1 + j] == 'T':
+                    print(f'\tAGENT: win')
+                    return True
+                else:
+                    self.map[self.Ax - 1 + i][self.Ay - 1 + j]['ratio'] = 0
+
+        return False
+
+    def get_best_action(self, hint, turn):
+
+        return 'move'
+
+        return 'big_scan'
+
+        return 'teleport'
+
+        return ''
+
+    def get_best_Teleport(self):
+        pass
+
+    def get_best_direction(self, map):
+        return 'left'
+
+    def agentMove(self, direction):
+        Ax = self.Ax
+        Ay = self.Ay
+        if direction == 'left':
+            Ay -= 2
+        elif direction == 'right':
+            Ay += 2
+        elif direction == 'up':
+            Ax -= 2
+        elif direction == 'down':
+            Ax += 2
+        self.map = self.updateAgentPos(Ax, Ay)
+        self.agentScan('small')

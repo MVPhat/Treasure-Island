@@ -5,9 +5,10 @@ import random
 import time
 from pirate import minDistance
 from agent import AgentFind
+from agent import Agent
 
-EXAMPLE_FILE = "MAP_1.txt"
-TEST_CASE = "LOG_1.txt"
+EXAMPLE_FILE = "MAP_0.txt"
+TEST_CASE = "LOG_0.txt"
 
 
 def readInputFile(filename):
@@ -29,8 +30,8 @@ def readInputFile(filename):
             map.append(f.readline().split(";"))
         for i in range(int(height)):
             for j in range(int(width)):
-                map[i][j] = (int(map[i][j][0]), ' ' if map[i][j][1] ==
-                             "\n" or map[i][j][1] == " " else map[i][j][1], False, 1)
+                map[i][j] = (int(map[i][j][0]), '' if map[i][j][1] ==
+                             "\n" or map[i][j][1] == "" else map[i][j][1], False, 1)
     map = np.array(map, dtype=[
                    ('region', np.short), ('type', 'U4'), ('mark', np.bool_), ('ratio', np.short)])
     return (int(width), int(height)), int(reveals[0]), int(free[0]), regions, (int(Tx), int(Ty)), map
@@ -64,20 +65,6 @@ HINTS_NAME = [
 # o Stay and perform a large scan.
 
 
-def agentScan(map, agent_pos, type_scan):
-    Ax, Ay = agent_pos
-    scan = 3 if type_scan == 'small' else 5
-    for i in range(scan):
-        for j in range(scan):
-            if map['type'][Ax - 1 + i][Ay - 1 + j] == 'T':
-                print(f'\tAGENT: win')
-                return True
-            else:
-                map[Ax - 1 + i][Ay - 1 + j]['ratio'] = 0
-
-    return map
-
-
 turn = 0
 
 (width, height), reveal, free, region, (Tx, Ty), map = readInputFile(EXAMPLE_FILE)
@@ -92,6 +79,14 @@ piratePos = (prison_list[0][ranIdx], prison_list[1][ranIdx])
 isWin = False
 line = 0
 list_log = []
+
+while True:
+    Ax = random.randint(0, width-1)
+    Ay = random.randint(0, height-1)
+    if not (map[Ax][Ay]['type'] == 'P' or map[Ax][Ay]['type'] == 'M' or map[Ax][Ay]['region'] == 0):
+        break
+
+agent = Agent(Ax, Ay, map)
 
 while True:
     turn += 1
@@ -122,9 +117,13 @@ while True:
 
         Px, Py = piratePos
         map[Px][Py]['type'] = map[Px][Py]['type'][:-1]
+        map[Px][Py]['ratio'] = 0
 
         # pirate move
         PIRATE_STEP = 2 if len(pirateMoves) > 1 else 1
+        if PIRATE_STEP == 2:
+            Px, Py = pirateMoves[1]
+            map[Px][Py]['ratio'] = 0
         pirateMoves = pirateMoves[PIRATE_STEP:]
 
         if (np.all((Tx, Ty) == piratePos) or len(pirateMoves) == 0):
@@ -137,6 +136,7 @@ while True:
         piratePos = pirateMoves[0]
 
         Px, Py = piratePos
+        map[Px][Py]['ratio'] = 0
         map[Px][Py]['type'] += 'p'
 
     print(
@@ -148,11 +148,6 @@ while True:
     num, name = HINTS_NAME[hint - 1]
 
     if (turn == 1):
-        while True:
-            Ax = random.randint(0, width-1)
-            Ay = random.randint(0, height-1)
-            if not (map[Ax][Ay]['type'] == 'P' or map[Ax][Ay]['type'] == 'M' or map[Ax][Ay]['region'] == 0):
-                break
 
         while True:
             hint = Hint(map, width, hint=f'h{num}')
@@ -177,18 +172,30 @@ while True:
     list_log.append(f'\t\tHINT [{num}][name]: {name}')
     # print(visual.map[visual.map['mark']])
 
-    print(f'\tAGENT [pos]: ({Ax}, {Ay})')
-    list_log.append(f'\tAGENT [pos]: ({Ax}, {Ay})')
+    print(f'\tAGENT [pos]: ({agent.Ax}, {agent.Ay})')
+    list_log.append(f'\tAGENT [pos]: ({agent.Ax}, {agent.Ay})')
     line += 2
 
-    if 'A' not in map[Ax][Ay]['type']:
-        map[Ax][Ay]['type'] += 'A'
+    agent.updateMap(map)
+
+    map = agent.updateAgentPos(agent.Ax, agent.Ay)
 
     for i in range(2):
         print(f"\tAGENT [action][{i+1}]")
         list_log.append(f"\tAGENT [action][{i+1}]")
-        line += 1
-        if i == 0:
+        action = agent.get_best_action(hint=hint, turn=turn)
+
+        direction = agent.get_best_direction(map=hint.map)
+
+        if action == 'move':
+            agent.agentMove(direction)
+        elif action == 'big_scan':
+            agent.agentScan('big')
+        elif action == 'teleport':
+            (teleX, teleY) = agent.get_best_Teleport()
+            map = agent.updateAgentPos(teleX, teleY)
+        elif action == 'verify':
+            line += 1
             _, list_log, line = hint.verify(
                 turn=turn, list_log=list_log, line=line)
         # if (turn == reveal):

@@ -393,21 +393,21 @@ class Hint:
 
         print(f'\t\tHINT [verify]: {hint_res}')
         list_log.append(f'\t\tHINT [verify]: {hint_res}')
-        for i in range(self.n):
-            for j in range(self.n):
-                value, dump, visual, ratio = self.map[i][j]
-                if (ratio == 0):
-                    ratio = 0
-                else:
-                    if hint_isPositive:
-                        ratio = 1 if not (hint_res ^ visual) else 0
-                    else:
-                        ratio = 1 if (hint_res ^ visual) else 0
-                self.map[i][j] = (value, dump, visual, ratio)
-        visual = Visualization(self.n, self.n, self.map)
-        filename = f'TURN[{turn}]_HINT[{self.hint}]_verify'
-        visual.visualize(filename)
-        print(f'\t\tHINT [verify_visual]: {filename}.eps')
+        # for i in range(self.n):
+        #     for j in range(self.n):
+        #         value, dump, visual, ratio = self.map[i][j]
+        #         if (ratio == 0):
+        #             ratio = 0
+        #         else:
+        #             if hint_isPositive:
+        #                 ratio = 1 if not (hint_res ^ visual) else 0
+        #             else:
+        #                 ratio = 1 if (hint_res ^ visual) else 0
+        #         self.map[i][j] = (value, dump, visual, ratio)
+        # visual = Visualization(self.n, self.n, self.map)
+        # filename = f'TURN[{turn}]_HINT[{self.hint}]_verify'
+        # visual.visualize(filename)
+        # print(f'\t\tHINT [verify_visual]: {filename}.eps')
 
         return hint_res, list_log, (line + 1)
 

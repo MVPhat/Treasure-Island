@@ -1,0 +1,225 @@
+
+GIVE HINT: 12
+A half of the map without treasure (rare)
+east
+TURN 1:
+AGENT TURN:
+LONG MOVE: -4, 0 | NEW POSITION: 16, 7
+LONG MOVE: 0, 3 | NEW POSITION: 16, 10
+PIRATE TURN
+GIVE HINT: 6
+He tells you that you are the nearest person to the treasure (between you and the prison he is staying)
+
+TURN 2:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 16, 14
+LONG MOVE: 4, 0 | NEW POSITION: 20, 14
+PIRATE TURN
+PIRATE REVEALED: 23, 19
+GIVE HINT: 2
+2-5 regions that 1 of them has the treasure
+[2, 1]
+TURN 3:
+AGENT TURN:
+VERIFY: HINT 2
+VERIFY: HINT 1
+PIRATE TURN
+GIVE HINT: 6
+He tells you that you are the nearest person to the treasure (between you and the prison he is staying)
+
+TURN 4:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 20, 18
+LONG MOVE: 4, 0 | NEW POSITION: 24, 18
+PIRATE TURN
+PIRATE FREED: 23, 19
+MOVE: 1, 0 | NEW POSITION 24, 19
+MOVE: 0, 1 | NEW POSITION 24, 20
+GIVE HINT: 8
+A column and/or a row that do not contain the treasure
+row: 51, column: 0
+TURN 5:
+AGENT TURN:
+VERIFY: HINT 4
+LONG MOVE: 0, 4 | NEW POSITION: 24, 22
+PIRATE TURN
+MOVE: 1, 0 | NEW POSITION 25, 20
+MOVE: 1, 0 | NEW POSITION 26, 20
+GIVE HINT: 5
+A small rectangle area that doesn't has the treasure
+row1 = 14, row2 = 33, col1 = 13, col2 = 25
+TURN 6:
+AGENT TURN:
+LONG MOVE: 4, 0 | NEW POSITION: 28, 22
+LONG MOVE: 0, 3 | NEW POSITION: 28, 25
+PIRATE TURN
+MOVE: 1, 0 | NEW POSITION 27, 20
+MOVE: 1, 0 | NEW POSITION 28, 20
+GIVE HINT: 1
+A list of random tiles that doesn't contain the treasure (1 to 12)
+[array([42, 53]), array([48, 57]), array([37, 55]), array([58, 38]), array([40, 34]), array([58, 41]), array([56, 55])]
+TURN 7:
+AGENT TURN:
+LONG MOVE: 4, 0 | NEW POSITION: 32, 25
+LONG MOVE: 4, 0 | NEW POSITION: 36, 25
+PIRATE TURN
+MOVE: 1, 0 | NEW POSITION 29, 20
+MOVE: 0, 1 | NEW POSITION 29, 21
+GIVE HINT: 14
+2 squares that are different in size, the small one is placed inside the bigger one, the treasure is somewhere inside the gap between 2 squares (rare)
+big rec = (12, 59, 9, 54), small rec = (20, 43, 18, 49)
+TURN 8:
+AGENT TURN:
+VERIFY: HINT 7
+LONG MOVE: 0, 4 | NEW POSITION: 36, 29
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 29, 22
+MOVE: 0, 1 | NEW POSITION 29, 23
+GIVE HINT: 15
+The treasure is in a region that has mountain
+ok
+TURN 9:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 36, 33
+LONG MOVE: 0, 4 | NEW POSITION: 36, 37
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 29, 24
+MOVE: 0, 1 | NEW POSITION 29, 25
+GIVE HINT: 4
+A large rectangle area that has the treasure
+row1 = 0, row2 = 40, col1 = 28, col2 = 61
+TURN 10:
+AGENT TURN:
+VERIFY: HINT 9
+BIG SCAN
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 29, 26
+MOVE: 0, 1 | NEW POSITION 29, 27
+GIVE HINT: 3
+1-3 regions that do not contain the treasure
+[3]
+TURN 11:
+AGENT TURN:
+LONG MOVE: 0, 3 | NEW POSITION: 36, 40
+SHORT MOVE AND SMALL SCAN: -1, 0 | NEW POSITION: 35, 40
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 29, 28
+MOVE: 0, 1 | NEW POSITION 29, 29
+GIVE HINT: 3
+1-3 regions that do not contain the treasure
+[5, 3]
+TURN 12:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 35, 44
+BIG SCAN
+PIRATE TURN
+MOVE: 1, 0 | NEW POSITION 30, 29
+MOVE: 0, 1 | NEW POSITION 30, 30
+GIVE HINT: 9
+2 regions that the treasure is somewhere in their boundary
+2, 5
+TURN 13:
+AGENT TURN:
+VERIFY: HINT 12
+SHORT MOVE AND SMALL SCAN: 0, 1 | NEW POSITION: 35, 45
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 30, 31
+MOVE: 0, 1 | NEW POSITION 30, 32
+GIVE HINT: 5
+A small rectangle area that doesn't has the treasure
+row1 = 47, row2 = 54, col1 = 9, col2 = 38
+TURN 14:
+AGENT TURN:
+BIG SCAN
+LONG MOVE: 4, 0 | NEW POSITION: 39, 45
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 30, 33
+MOVE: 0, 1 | NEW POSITION 30, 34
+GIVE HINT: 2
+2-5 regions that 1 of them has the treasure
+[5, 1, 4, 2, 3]
+TURN 15:
+AGENT TURN:
+BIG SCAN
+LONG MOVE: 0, 3 | NEW POSITION: 39, 48
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 30, 35
+MOVE: 1, 0 | NEW POSITION 31, 35
+GIVE HINT: 3
+1-3 regions that do not contain the treasure
+[5, 1]
+TURN 16:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 39, 52
+BIG SCAN
+PIRATE TURN
+MOVE: 1, 0 | NEW POSITION 32, 35
+MOVE: 1, 0 | NEW POSITION 33, 35
+GIVE HINT: 15
+The treasure is in a region that has mountain
+ok
+TURN 17:
+AGENT TURN:
+SHORT MOVE AND SMALL SCAN: -2, 0 | NEW POSITION: 37, 52
+BIG SCAN
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 33, 36
+MOVE: 0, 1 | NEW POSITION 33, 37
+GIVE HINT: 10
+The treasure is somewhere in a boundary of 2 regions
+ok
+TURN 18:
+AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 37, 56
+BIG SCAN
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 33, 38
+MOVE: 0, 1 | NEW POSITION 33, 39
+GIVE HINT: 6
+He tells you that you are the nearest person to the treasure (between you and the prison he is staying)
+
+TURN 19:
+AGENT TURN:
+LONG MOVE: 0, -4 | NEW POSITION: 37, 52
+LONG MOVE: -3, 0 | NEW POSITION: 34, 52
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 33, 40
+MOVE: 0, 1 | NEW POSITION 33, 41
+GIVE HINT: 13
+From the center of the map/from the prison that he's staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)
+prison, SW
+TURN 20:
+AGENT TURN:
+BIG SCAN
+LONG MOVE: 3, 0 | NEW POSITION: 37, 52
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 33, 42
+MOVE: 0, 1 | NEW POSITION 33, 43
+GIVE HINT: 8
+A column and/or a row that do not contain the treasure
+row: 23, column: 61
+TURN 21:
+AGENT TURN:
+BIG SCAN
+LONG MOVE: 0, 4 | NEW POSITION: 37, 56
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 33, 44
+MOVE: 1, 0 | NEW POSITION 34, 44
+GIVE HINT: 11
+The treasure is somewhere in an area bounded by 2-3 tiles from sea
+ok
+TURN 22:
+AGENT TURN:
+VERIFY: HINT 21
+LONG MOVE: 0, -4 | NEW POSITION: 37, 52
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 34, 45
+MOVE: 0, 1 | NEW POSITION 34, 46
+GIVE HINT: 9
+2 regions that the treasure is somewhere in their boundary
+3, 6
+TURN 23:
+AGENT TURN:
+LONG MOVE: -3, 0 | NEW POSITION: 34, 52
+LONG MOVE: 0, -4 | NEW POSITION: 34, 48
+WIN

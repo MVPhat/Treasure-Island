@@ -1,171 +1,278 @@
-import random
-
-
-def gen_area(map, n):
-    # area = []
-    # best_area = []
-    # while len(best_area) == 0:
-    #     times = 100
-    #     cur_cnt = 0
-    #     next_cnt = 0
-    #     while times != 0:
-    #         area = random.sample(range(n), 4)
-    #         area.sort()
-    #         if (area[3] - area[1]) <= int(n/3) and (area[2] - area[0]) <= int(n/3):
-    #             for i in range(area[0], area[2] + 1):
-    #                 for j in range(area[1], area[3] + 1):
-    #                     if map[i][j]['mark'] == False:
-    #                         next_cnt += 1
-    #             if next_cnt > cur_cnt:
-    #                 best_area = area.copy()
-    #                 cur_cnt = next_cnt
-    #             times -= 1
-    # return (int(best_area[2]/2 + 1), int(best_area[3]/2 + 1))
-    # if len(best_area) > 0 else 1
-    index = []
-    for i in range(len(map)):
-        for j in range(len(map)):
-            if map[i][j]['mark'] == True:
-                index.append((i, j))
-    sumrow = 0
-    sumcol = 0
-    for i in range(len(index)):
-        sumrow += index[i][0]
-        sumcol += index[i][1]
-    return (int(sumrow/len(index)), int(sumcol/len(index)))
-
-
-class Cell:
-    def __init__(self, row, col, dist, preStep):
-        self.row = row
-        self.col = col
-        self.dist = dist
-        self.preStep = list(preStep)
-
-
-def AgentFind(array_map, agentPos):
-    source = Cell(0, 0, 0, [])
-
-    center = gen_area(array_map, len(array_map))
-    print(center)
-
-    # Finding the source to start from
-    source.row, source.col = agentPos
-    source.preStep.append((source.row, source.col))
-
-    # To maintain location visit status
-    visited = [[False for _ in range(len(array_map[0]))]
-               for _ in range(len(array_map))]
-
-    # applying BFS on matrix cells starting from source
-    queue = []
-    queue.append(source)
-    visited[source.row][source.col] = True
-    while len(queue) != 0:
-        source = queue.pop(0)
-        # Destination found;
-        if (source.row == center[0] and source.col == center[1]):
-            return source.preStep
-
-        # moving up
-        if isValid(source.row - 1, source.col, array_map, visited):
-            nextStep = Cell(source.row - 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append(((nextStep.row, nextStep.col)))
-            queue.append(nextStep)
-            visited[source.row - 1][source.col] = True
-
-        # moving down
-        if isValid(source.row + 1, source.col, array_map, visited):
-            nextStep = Cell(source.row + 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            visited[source.row + 1][source.col] = True
-
-        # moving left
-        if isValid(source.row, source.col - 1, array_map, visited):
-            nextStep = Cell(source.row, source.col - 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            visited[source.row][source.col - 1] = True
-
-        # moving right
-        if isValid(source.row, source.col + 1, array_map, visited):
-            nextStep = Cell(source.row, source.col + 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            visited[source.row][source.col + 1] = True
-
-    return -1
-
-
-def isValid(x, y, array_map, visited):
-    if ((x >= 0 and y >= 0) and
-        (x < len(array_map) and y < len(array_map[0])) and
-            (array_map[x][y]['region'] != 0) and ("M" not in array_map[x][y]['type']) and (visited[x][y] == False)):
-        return True
-    return False
-
+import numpy as np
+from const import TREASURE
+from const import INFINITY
+import math
+from init import game
 
 class Agent:
-    def __init__(self, Ax, Ay, map) -> None:
-        self.map = map
-        self.Ax = Ax
-        self.Ay = Ay
+    def __init__(self, width=None, height=None, x=None, y=None, copy=None) -> None:
+        if copy != None:
+            self.width = copy.width
+            self.height = copy.height
+            self.x = copy.x
+            self.y = copy.y
+            self.hints = copy.hints.copy()
+            self.map = np.copy(copy.map)
+            self.can_tele = copy.can_tele
+            self.pirate_x = copy.pirate_x
+            self.pirate_y = copy.pirate_y
+            self.THRESH_HOLD = copy.THRESH_HOLD
+        else:
+            self.width = width
+            self.height = height
+            self.x = x
+            self.y = y
+            self.hints = set()
+            self.map = self.process_map(height, width)
+            self.can_tele = 1
+            self.pirate_x = -1
+            self.pirate_y = -1
+            self.THRESH_HOLD = min(64, int(math.sqrt(self.width * self.height)))
 
-    def updateMap(self, map):
-        self.map = map
+    def process_map(self, height, width):
+        sus = np.ones((height, width), dtype=np.bool_)
+        for i in range(height):
+            for j in range(width):
+                if not game.good_for_treasure(i, j):
+                    sus[i][j] = 0
+        return sus
 
-    def updateAgentPos(self, Ax, Ay):
-        self.map[self.Ax][self.Ay]['type'] = ''.join(
-            self.map[self.Ax][self.Ay]['type'].split('A'))
-        self.Ax = Ax
-        self.Ay = Ay
-        if 'A' not in self.map[Ax][Ax]['type']:
-            self.map[Ax][Ay]['type'] += 'A'
-            return self.map
+    def get_position(self):
+        return (self.x, self.y)
 
-    def agentScan(self, type_scan):
-        scan = 3 if type_scan == 'small' else 5
-        for i in range(scan):
-            for j in range(scan):
-                if self.map['type'][self.Ax - 1 + i][self.Ay - 1 + j] == 'T':
-                    print(f'\tAGENT: win')
-                    return True
-                else:
-                    self.map[self.Ax - 1 + i][self.Ay - 1 + j]['ratio'] = 0
+    def can_move(self, x, y, dx, dy):
+        u = x + dx
+        v = y + dy
+        if not game.valid(u, v):
+            return False
+        if u < x:
+            u, x = x, u
+        if v < y:
+            v, y = y, v
+        return not game.BAD_FOR_AGENT[x: u+1, y: v+1].any()
 
-        return False
+    def move(self, dx, dy):
+        if not self.can_move(self.x, self.y, dx, dy):
+            return False
+        self.x += dx
+        self.y += dy
+        self.map[self.x][self.y] = 0
+        return True
 
-    def get_best_action(self, hint, turn):
+    def tele(self, x, y):
+        if not self.can_tele:
+            return False
+        if not game.good_for_agent(x, y):
+            return False
+        self.tele = False
+        self.x = x
+        self.y = y
+        self.map[self.x][self.y] = 0
 
-        return 'move'
+    def small_scan(self):
+        Tx, Ty = game.TREASURE
+        found = (self.x - 1 <= Tx and Tx <= self.x + 1) and (self.y - 1 <= Ty and Ty <= self.y + 1)
+        mX = max(0, self.x - 1)
+        MX = min(self.height, self.x + 2)
+        mY = max(0, self.y - 1)
+        MY = min(self.width, self.y + 2)
+        self.map[mX:MX, mY:MY] = 0
+        return found
 
-        return 'big_scan'
+    def big_scan(self):
+        Tx, Ty = game.TREASURE
+        found = (self.x - 2 <= Tx and Tx <= self.x + 2) and (self.y - 2 <= Ty and Ty <= self.y + 2)
+        mX = max(0, self.x - 2)
+        MX = min(self.height, self.x + 3)
+        mY = max(0, self.y - 2)
+        MY = min(self.width, self.y + 3)
+        self.map[mX:MX, mY:MY] = 0
+        return found
 
-        return 'teleport'
+    def agent_bfs(self, Ax, Ay):
+        cost = np.zeros((self.height, self.width), dtype=np.int32)
+        queue = []
+        queue.append((Ax, Ay))
+        i = 0
+        heuristic = 0
+        while i < len(queue):
+            x, y = queue[i]
+            for move in game.SHORT_MOVES:
+                dx, dy = move
+                u = x + dx
+                v = y + dy
+                if self.can_move(x, y, dx, dy) and cost[u][v] == 0 and not (u == Ax and v == Ay):
+                    cost[u][v] = cost[x][y] + 1
+                    queue.append((u, v))
+            for move in game.LONG_MOVES:
+                dx, dy = move
+                u = x + dx
+                v = y + dy
+                if self.can_move(x, y, dx, dy) and cost[u][v] == 0 and not (u == Ax and v == Ay):
+                    cost[u][v] = cost[x][y] + 1
+                    queue.append((u, v))
+            i += 1
+        return cost
 
-        return ''
+    def evaluate_position(self):
+        if np.sum(self.map) <= self.THRESH_HOLD:
+            heuristic = 0
+            for x, y in np.argwhere(self.map == True):
+                if not (x, y) in game.CACHE.keys():
+                    cost = self.agent_bfs(x, y)
+                    game.CACHE[(x, y)] = cost
+                heuristic += game.CACHE[(x, y)][self.x][self.y]
+            return heuristic
+        if not self.get_position() in game.CACHE.keys():
+            cost = self.agent_bfs(self.x, self.y)
+            game.CACHE[self.get_position()] = cost
+        return np.sum(np.multiply(self.map, game.CACHE[self.get_position()]))
 
-    def get_best_Teleport(self):
-        pass
+    def masking(self, mask, inverse):
+        if inverse:
+            self.map &= (~mask)
+        else:
+            self.map &= mask
+        
+    def receive_hint(self, hint):
+        self.hints.add(hint)
 
-    def get_best_direction(self, map):
-        return 'left'
+    def need_verification(self):
+        return len(self.hints) != 0
 
-    def agentMove(self, direction):
-        Ax = self.Ax
-        Ay = self.Ay
-        if direction == 'left':
-            Ay -= 2
-        elif direction == 'right':
-            Ay += 2
-        elif direction == 'up':
-            Ax -= 2
-        elif direction == 'down':
-            Ax += 2
-        self.map = self.updateAgentPos(Ax, Ay)
-        self.agentScan('small')
+    def evaluate_hint(self, hint, depth):
+        MrPositive = Agent(copy=self)
+        MrNegative = Agent(copy=self)
+        MrPositive.masking(hint.map['contains'], False)
+        MrNegative.masking(hint.map['contains'], True)
+        sus_1 = np.sum(MrPositive.map)
+        sus_2 = np.sum(MrNegative.map)
+        if sus_1 == 0 or sus_2 == 0:
+            return INFINITY
+        MrPositive.hints.discard(hint)
+        MrNegative.hints.discard(hint)
+        heuristic_1, _ = MrPositive.look_forward(depth + 1)
+        heuristic_2, _ = MrNegative.look_forward(depth + 1)
+        
+        
+        return (heuristic_1 * sus_1 + heuristic_2 * sus_2) / (sus_1 + sus_2)
+
+    def find_best_hint(self, depth):
+        best_heuristic, best_hint_id = -1, -1
+        for hint in self.hints:
+            if len(self.hints) == 1:
+                return 0, hint.id
+            heuristic = self.evaluate_hint(hint, depth)
+            if best_heuristic == -1 or best_heuristic > heuristic:
+                best_heuristic = heuristic
+                best_hint_id = hint.id
+        return best_heuristic, best_hint_id
+            
+    def max_heuristic(self, heuristic, action, best_heuristic, best_action):
+        if best_heuristic > heuristic:
+            return heuristic, action
+        return best_heuristic, best_action
+
+    def look_forward(self, depth):
+        best_action = ("do nothing")
+        best_heuristic = INFINITY
+
+        if depth < game.ACTIONS_IN_TURN:
+            if self.need_verification():
+                heuristic, hint_id = self.find_best_hint(depth)
+                best_heuristic, best_action = self.max_heuristic(heuristic, ("verify", hint_id), best_heuristic, best_action)
+                return best_heuristic, best_action
+            
+            impostor = Agent(copy=self)
+            impostor.big_scan()
+            heuristic, _ = impostor.look_forward(depth + 1)
+            best_heuristic, best_action = self.max_heuristic(heuristic, ("big scan"), best_heuristic, best_action)
+            if best_heuristic == 0:
+                return best_heuristic, best_action
+
+            for move in game.SHORT_MOVES:
+                impostor = Agent(copy=self)
+                dx, dy = move
+                if impostor.move(dx, dy):
+                    impostor.small_scan()
+                    heuristic, _ = impostor.look_forward(depth + 1)
+                    best_heuristic, best_action = self.max_heuristic(heuristic, ("short move", (dx, dy)), best_heuristic, best_action)
+                    if best_heuristic == 0:
+                        return best_heuristic, best_action
+            
+            for move in game.LONG_MOVES:
+                impostor = Agent(copy=self)
+                dx, dy = move
+                if impostor.move(dx, dy):
+                    heuristic, _ = impostor.look_forward(depth + 1)
+                    best_heuristic, best_action = self.max_heuristic(heuristic, ("long move", (dx, dy)), best_heuristic, best_action)
+                    if best_heuristic == 0:
+                        return best_heuristic, best_action
+        
+        if self.can_tele:
+            for row in range(self.height):
+                for col in range(self.width):
+                    impostor = Agent(copy=self)
+                    if impostor.tele(row, col):
+                        heuristic, _ = impostor.look_forward(depth)
+                        best_heuristic, best_action = self.max_heuristic(heuristic, ("tele", (row, col)), best_heuristic, best_action)
+                        if best_heuristic == 0:
+                            return best_heuristic, best_action
+        
+        if best_heuristic == INFINITY:
+            best_heuristic = self.evaluate_position()
+
+        return best_heuristic, best_action
+    
+    def evaluate_pirate_move(self, new_pirate_x, new_pirate_y):
+        if self.pirate_x == -1 or self.pirate_y == -1:
+            self.pirate_x, self.pirate_y = new_pirate_x, new_pirate_y
+            return
+        mask = self.pirate_bfs(new_pirate_x, new_pirate_y)
+        self.masking(mask, False)
+        self.pirate_x, self.pirate_y = new_pirate_x, new_pirate_y
+
+    def pirate_bfs(self, pirate_x, pirate_y):
+        cost = np.zeros((self.height, self.width), dtype=np.int32) 
+        queue = []
+        queue.append((self.pirate_x, self.pirate_y, 2))
+        cost[self.pirate_x][self.pirate_y] = 2
+        queue.append((pirate_x, pirate_y, 1))
+        cost[pirate_x][pirate_y] = 1
+        i = 0
+        while i < len(queue):
+            x, y, z = queue[i]
+            for move in game.PIRATE_MOVES:
+                dx, dy = move
+                u = x + dx
+                v = y + dy
+                if self.can_move(x, y, dx, dy) and cost[u][v] == 0:
+                    cost[u][v] = z
+                    queue.append((u, v, z))
+            i += 1
+        mask = (cost == 1)
+        return mask
+
+    def bad_hint(self, hint):
+        MrPositive = Agent(copy=self)
+        MrPositive.masking(hint.map['contains'], False)
+        sus = np.sum(MrPositive.map)
+        return sus == 0 or sus == np.sum(self.map)
+
+    def discard_bad_hints(self):
+        bad_hints = []
+        for hint in self.hints:
+            if self.bad_hint(hint):
+                bad_hints.append(hint)
+        for hint in bad_hints:
+            self.hints.discard(hint)
+
+    def make_decision(self, depth):
+        self.discard_bad_hints()
+        heuristic, action = self.look_forward(depth)
+        return action
+        
+    def process_hint(self, hint, inverse):
+        self.masking(hint.map['contains'], inverse)
+        Tx, Ty = game.TREASURE
+        self.hints.discard(hint)

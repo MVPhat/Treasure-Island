@@ -1,21 +1,30 @@
 from turtle import Screen, Turtle
 import turtle
 import os
-
+import random
+import numpy as np
 from PIL import Image
+from const import *
 
+from init_2 import *
 
 class Visualization:
-    def __init__(self, width, height, map):
-        self.map = map
+    def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.FONT_SIZE = 14 if width == 16 else 8
-        self.SIZE = 40 if width == 16 else 24
+        self.map = {}
+        self.map['region'] = game.MAP['region']
+        self.map['entity'] = game.MAP['entity']
+        self.map['mark']   = np.zeros((height, width), dtype=np.bool_)
+        self.map['ratio']  = np.ones((height, width), dtype=np.bool_)
+        self.FONT_SIZE = 14 if width <= 16 else 8
+        self.SIZE = 40 if width <= 16 else 24
         self.FONT = ('Arial', self.FONT_SIZE, 'normal')
         self.FONT_BOLD = ('Arial', self.FONT_SIZE, 'bold')
         self.COLORS = [(111, 168, 220), (255, 242, 204), (217, 210, 233),
                        (230, 184, 175), (234, 209, 220), (208, 224, 227), (217, 234, 211)]
+        while len(self.COLORS) < game.NUM_OF_REGION:
+            self.COLORS.append((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
        # set screen characteristics
         self.screen = Screen()
         self.screen.title('Visualization')
@@ -31,8 +40,9 @@ class Visualization:
         self.marker.penup()
         self.marker.hideturtle()
 
-        self.screen.tracer(0)  # because I have no patience
-        turtle.speed('fastest')
+        self.screen.tracer(0, 0)  # because I have no patience
+        self.greg.speed('fastest')
+        self.marker.speed('fastest')
 
     def square(self, size, color, mark):
         ''' draw and fill one square '''
@@ -51,13 +61,15 @@ class Visualization:
             self.greg.left(90)
 
         self.greg.end_fill()
-
         self.greg.penup()
         self.greg.forward(size)
 
     def chessboard(self, map, size):
         ''' draw the whole chessboard '''
+        self.greg.clear()
+        self.marker.clear()
         self.greg.penup()
+        
 
         # self.greg.goto(-size * (self.width/2), size * (self.height/2 + 1))
         # for i in range(self.width):
@@ -80,30 +92,31 @@ class Visualization:
         self.greg.goto(-size * self.width/2, size * self.height/2)
         for i in range(self.height):
             for j in range(self.width):
-                area, dump, mark, ratio = map[i][j]
-                color = self.COLORS[area] if ratio == 1 else "gray"
+                region = map['region'][i][j]
+                entity = ENTITIES[map['entity'][i][j]]
+                mark   = map['mark'][i][j]
+                ratio  = map['ratio'][i][j]
 
-                if (f"{area}{dump}" == 'Tp'):
-                    color = 'red'
-                elif (f"{area}{mark}" == 'TA'):
-                    color = 'orange'
+                if (i, j) == game.TREASURE:
+                    self.marker.pencolor('yellow')
+                if (i, j) == agent.get_position():
+                    entity += 'a'
+                    self.marker.pencolor('green')
+                if (i, j) == pirate.get_position():
+                    entity += 'p'
+                    self.marker.pencolor('red')
+                
+                text = f"{region}{entity}"
+                color = self.COLORS[region] if ratio == 1 else "gray"
 
                 self.square(size, color, mark)
 
                 self.marker.goto(self.greg.xcor() - size/2,
                                  self.greg.ycor() + size/2 - self.FONT_SIZE/2)
-    #             self.marker.pencolor("black")
-                if (dump == "P" or dump == "T"):
-                    self.marker.write(f"{area}{dump}",
-                                      align='center', font=self.FONT_BOLD)
-                elif ('p' in dump and dump != " ") or ('A' in dump and dump != ' '):
-                    self.marker.pencolor('red')
-                    self.marker.write(f"{area}{dump}",
-                                      align='center', font=self.FONT_BOLD)
-                    self.marker.pencolor('black')
-                else:
-                    self.marker.write(f"{area}{dump}",
-                                      align='center', font=self.FONT)
+
+                self.marker.write(text, align='center', font=self.FONT_BOLD)
+
+                self.marker.pencolor("black")
             self.greg.goto(-size * self.height/2, size *
                            self.width/2 - size * (i + 1))
         self.screen.update()
@@ -117,12 +130,11 @@ class Visualization:
         ts.getcanvas().postscript(file=f'./eps/{filename}.eps')
         img = Image.open(f'./eps/{filename}.eps')
         img.save(f'./png/{filename}.png', 'png')
-        # img.show()
 
     def clear_mark(self):
         self.map['mark'] = False
 
-    def visualize(self, filename):
+    def visualize(self, filename=None):
         self.chessboard(self.map, self.SIZE)
-        # self.screen.tracer(False)
-        self.save_image(filename)
+        if filename != None:
+            self.save_image(filename)

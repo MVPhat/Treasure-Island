@@ -1,155 +1,63 @@
 import numpy as np
+from init import game
 
+class Pirate:
+    def __init__(self, width, height, x, y) -> None:
+        self.width = width
+        self.height = height
+        self.x = x
+        self.y = y
+        self.prison = (x, y)
+        self.hints = {}
+        self.map = self.bfs(x, y)
+        self.free = False
+        self.reveal = False
+        self.step = 0
+        self.move_seq = self.get_move_sequence()
+        self.map = (self.map + 1) // 2
 
-class Cell:
-    def __init__(self, row, col, dist, preStep):
-        self.row = row
-        self.col = col
-        self.dist = dist
-        self.preStep = list(preStep)
+    def get_position(self):
+        return (self.x, self.y)
 
+    def get_move_sequence(self):
+        x, y = game.TREASURE
+        seq = []
+        while (x, y) != (self.x, self.y):
+            for move in game.PIRATE_MOVES:
+                dx, dy = move
+                u = x + dx
+                v = y + dy
+                if game.good_for_pirate(u, v) and self.map[u][v] == self.map[x][y] - 1:
+                    x, y = u, v
+                    seq.append((-dx, -dy))
+                    break
+        seq.reverse()
+        return seq
 
-def minDistance(array_map, type):
-    source = Cell(0, 0, 0, [])
+    def bfs(self, pirate_x, pirate_y):
+        cost = np.zeros((self.height, self.width)) 
+        queue = []
+        queue.append((pirate_x, pirate_y))
+        i = 0
+        while i < len(queue):
+            x, y = queue[i]
+            for move in game.PIRATE_MOVES:
+                dx, dy = move
+                u = x + dx
+                v = y + dy
+                if game.good_for_pirate(u, v) and cost[u][v] == 0 and not (u == pirate_x and v == pirate_y):
+                    cost[u][v] = cost[x][y] + 1
+                    queue.append((u, v))
+            i += 1
+        return cost
 
-    # Finding the source to start from
-    for i in range(len(array_map)):
-        for j in range(len(array_map)):
-            if type in array_map[i][j]['type']:
-                source.row = i
-                source.col = j
-                source.preStep.append((source.row, source.col))
-                break
+    def make_decision(self):
+        self.step += 1
+        return self.move_seq[self.step - 1]
 
-    # To maintain location visit status
-    visited = [[False for _ in range(len(array_map[0]))]
-               for _ in range(len(array_map))]
-
-    # applying BFS on matrix cells starting from source
-    queue = []
-    queue.append(source)
-    visited[source.row][source.col] = True
-    while len(queue) != 0:
-        source = queue.pop(0)
-        # Destination found;
-        if (array_map[source.row][source.col]['type'] == 'T'):
-            return source.dist, np.array(source.preStep)
-
-        # moving up
-        if isValid(source.row - 1, source.col, array_map, visited):
-            nextStep = Cell(source.row - 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append(((nextStep.row, nextStep.col)))
-            queue.append(nextStep)
-            #print("up", source.row, source.col)
-            visited[source.row - 1][source.col] = True
-
-        # moving down
-        if isValid(source.row + 1, source.col, array_map, visited):
-            nextStep = Cell(source.row + 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("down", source.row, source.col)
-            visited[source.row + 1][source.col] = True
-
-        # moving left
-        if isValid(source.row, source.col - 1, array_map, visited):
-            nextStep = Cell(source.row, source.col - 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("left", source.row, source.col)
-            visited[source.row][source.col - 1] = True
-
-        # moving right
-        if isValid(source.row, source.col + 1, array_map, visited):
-            nextStep = Cell(source.row, source.col + 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("right", source.row, source.col)
-            visited[source.row][source.col + 1] = True
-
-    return -1
-
-
-def isValid(x, y, array_map, visited):
-    if ((x >= 0 and y >= 0) and
-        (x < len(array_map) and y < len(array_map)) and
-            (array_map[x][y]['region'] != 0) and (array_map[x][y]['type'] != 'M') and (visited[x][y] == False)):
+    def move(self, dx, dy):
+        if not game.good_for_pirate(self.x + dx, self.y + dy):
+            return False
+        self.x += dx
+        self.y += dy
         return True
-    return False
-
-
-def verify_hint6(array_map, type):
-    source = Cell(0, 0, 0, [])
-
-    # Finding the source to start from
-    for i in range(len(array_map)):
-        for j in range(len(array_map[0])):
-            if type in array_map[i][j]['type']:
-                source.row = i
-                source.col = j
-                source.preStep.append((source.row, source.col))
-                break
-
-    # To maintain location visit status
-    visited = [[False for _ in range(len(array_map[0]))]
-               for _ in range(len(array_map))]
-
-    # applying BFS on matrix cells starting from source
-    queue = []
-    queue.append(source)
-    visited[source.row][source.col] = True
-    while len(queue) != 0:
-        source = queue.pop(0)
-        # Destination found;
-        if ('T' in array_map[source.row][source.col]['type']):
-            return source.dist, source.preStep
-
-        # moving up
-        if isValidHint6(source.row - 1, source.col, array_map, visited):
-            nextStep = Cell(source.row - 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append(((nextStep.row, nextStep.col)))
-            queue.append(nextStep)
-            #print("up", source.row, source.col)
-            visited[source.row - 1][source.col] = True
-
-        # moving down
-        if isValidHint6(source.row + 1, source.col, array_map, visited):
-            nextStep = Cell(source.row + 1, source.col,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("down", source.row, source.col)
-            visited[source.row + 1][source.col] = True
-
-        # moving left
-        if isValidHint6(source.row, source.col - 1, array_map, visited):
-            nextStep = Cell(source.row, source.col - 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("left", source.row, source.col)
-            visited[source.row][source.col - 1] = True
-
-        # moving right
-        if isValidHint6(source.row, source.col + 1, array_map, visited):
-            nextStep = Cell(source.row, source.col + 1,
-                            source.dist + 1, source.preStep)
-            nextStep.preStep.append((nextStep.row, nextStep.col))
-            queue.append(nextStep)
-            #print("right", source.row, source.col)
-            visited[source.row][source.col + 1] = True
-
-    return -1
-
-
-def isValidHint6(x, y, array_map, visited):
-    if ((x >= 0 and y >= 0) and
-        (x < len(array_map) and y < len(array_map)) and
-            (visited[x][y] == False)):
-        return True
-    return False

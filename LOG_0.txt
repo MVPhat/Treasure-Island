@@ -1,43 +1,26 @@
-31
-LOSE
-TURN [1]
-	PIRATE [pos]: (10, 10) 
-		HINT [verify]: True
-		HINT [2][name]: 2-5 regions that 1 of them has the treasure
-	AGENT [pos]: (3, 12)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [2]
-	PIRATE [reveal]: True
-	PIRATE [pos]: (10, 10) 
-		HINT [10][name]: The treasure is somewhere in a boundary of 2 regions
-	AGENT [pos]: (3, 8)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [3]
-	PIRATE [pos]: (10, 10) 
-		HINT [11][name]: The treasure is somewhere in an area bounded by 2-3 tiles from sea
-	AGENT [pos]: (3, 4)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [4]
-	PIRATE [free]: True
-	PIRATE [pos]: [9 9] 
-		HINT [12][name]: A half of the map without treasure (rare)
-	AGENT [pos]: (3, 0)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [5]
-	PIRATE [pos]: [7 9] 
-		HINT [11][name]: The treasure is somewhere in an area bounded by 2-3 tiles from sea
-	AGENT [pos]: (3, -4)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [6]
-	PIRATE [pos]: [5 9] 
-		HINT [15][name]: The treasure is in a region that has mountain
-	AGENT [pos]: (3, -8)
-	AGENT [action][1]
-	AGENT [action][2]
-TURN [7]
-	PIRATE [win]
+
+GIVE HINT: 10
+The treasure is somewhere in a boundary of 2 regions
+ok
+TURN 1:
+AGENT TURN:
+SHORT MOVE AND SMALL SCAN: 2, 0 | NEW POSITION: 8, 5
+LONG MOVE: 0, 4 | NEW POSITION: 8, 9
+PIRATE TURN
+GIVE HINT: 8
+A column and/or a row that do not contain the treasure
+row: 10, column: 11
+TURN 2:
+AGENT TURN:
+VERIFY: HINT 1
+BIG SCAN
+PIRATE TURN
+PIRATE REVEALED: 10, 10
+GIVE HINT: 13
+From the center of the map/from the prison that he's staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)
+center, N
+TURN 3:
+AGENT TURN:
+VERIFY: HINT 2
+SHORT MOVE AND SMALL SCAN: -2, 0 | NEW POSITION: 6, 9
+WIN

@@ -7,15 +7,6 @@ from visualization import Visualization
 import random
 import sys
 
-# print(minDistance(map, 'p'))
-
-# The agent has 2 action each turn, the available action:
-# o Verification, verify a hint is a truth or a liar.
-# o Move straight 1-2 steps in a direction then perform a
-# small scan.
-# o Move straight 3-4 steps in a direction.
-# o Stay and perform a large scan.
-
 
 def agent_win(scan):
     if scan == "small":
@@ -32,8 +23,8 @@ def pirate_win():
 
 def game_loop():
     np.set_printoptions(threshold=sys.maxsize)
-    visualization.map['ratio'] &= agent.map
-    visualization.visualize()
+    #visualization.map['ratio'] &= agent.map
+    #visualization.visualize()
 
     log = []
 
@@ -64,16 +55,16 @@ def game_loop():
     print(f"GIVE HINT: {hint.hint}")
     print(f"{HINTS_NAME[hint.hint-1]}")
     print(f"{hint.log}")
-
-    visualization.map['ratio'] &= agent.map
-    visualization.map['mark'] = hint.map['mark']
-    visualization.visualize()
+    
+    # visualization.map['ratio'] &= agent.map
+    # visualization.map['mark'] = hint.map['mark']
+    # visualization.visualize()
 
     while True:
         # Agent turn
         Tx, Ty = game.TREASURE
         if agent.map[Tx][Ty] == False:
-            print("WTF")
+            print("ERROR")
             input()
         log.append(f"\nTURN {turn}:")
         log.append("\nAGENT TURN:")
@@ -111,12 +102,12 @@ def game_loop():
                 scan = "big"
                 log.append(f"\nBIG SCAN")
 
-            visualization.map['ratio'] &= agent.map
+            #visualization.map['ratio'] &= agent.map
 
             if agent_win(scan):
-                log.append("\nWIN")
+                log.append("WIN")
                 print("WIN")
-                visualization.visualize()
+                #visualization.visualize()
                 return log
 
         # Pirate turn
@@ -150,8 +141,8 @@ def game_loop():
                 log.append(f"\nMOVE: {dx}, {dy} | NEW POSITION {Px}, {Py}")
                 print(f"MOVE: {dx}, {dy} | NEW POSITION {Px}, {Py}")
                 if pirate_win():
-                    visualization.visualize()
-                    log.append("\nLOST")
+                    #visualization.visualize()
+                    log.append("LOST")
                     print("LOST")
                     return log
                 agent.evaluate_pirate_move(new_pirate_x=Px, new_pirate_y=Py)
@@ -173,11 +164,11 @@ def game_loop():
         else:
             agent.receive_hint(hint)
 
-        print("Visualizing", end=" ")
-        start_time = time.time()
-        visualization.map['mark'] = hint.map['mark']
-        visualization.visualize()
-        print(time.time() - start_time)
+        # print("Visualizing", end=" ")
+        # start_time = time.time()
+        # visualization.map['mark'] = hint.map['mark']
+        # visualization.visualize()
+        # print(time.time() - start_time)
 
         log.append(f"\nGIVE HINT: {hint.hint}")
         log.append(f"\n{HINTS_NAME[hint.hint-1]}")
@@ -189,7 +180,7 @@ def game_loop():
 
 
 if __name__ == "__main__":
-    visualization = Visualization(width, height)
+    #visualization = Visualization(width, height)
 
     log = game_loop()
     save_file_log(log)

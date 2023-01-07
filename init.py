@@ -43,18 +43,16 @@ def readInputFile(filename):
 
 def save_file_log(log):
     f = open(TEST_CASE, 'w')
+    f.write(log.pop() + "\n")
+    f.write(str(len(log)))
     for line in log:
         f.write(line)
     f.close()
 
-
-EXAMPLE_FILE = "MAP_2.txt"
-TEST_CASE = "LOG_2.txt"
+EXAMPLE_FILE = "MAP_1.txt"
+TEST_CASE = "LOG_1.txt"
 
 map, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty = readInputFile(
     EXAMPLE_FILE)
 
-game = Game(map=map, width=width, height=height, reveal_turn=reveal_turn,
-            free_turn=free_turn, num_of_regions=num_of_regions, Tx=Tx, Ty=Ty)
-
-random.seed(time.time())
+game = Game(map=map, width=width, height=height, reveal_turn=reveal_turn, free_turn=free_turn, num_of_regions=num_of_regions, Tx=Tx, Ty=Ty)

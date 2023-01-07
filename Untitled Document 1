@@ -1,0 +1,21 @@
+Agent
+
+1. Algorithm description:
+
+In the game rule, the agent will have 2 action in each turn. In each action, the agent need to make decision which is ['tele', 'verify', 'short move', 'long move', 'big scan']. To make decision agent need to calculate base on certain confitions and heuristic i.e base on the hint aready exits, the current agent's position, the current pirate's position and the availabilty of certain resources (tele ability, knowledge base)
+
+Before calculate decision, the agent need to discard the bad hint by checking previous hint was not verify is bad or not. The bad hint will be if verify is True will not change in the decision of the agent which is the hint is gen in the area were know not contain the treasure.
+
+The agent will get the action by "look_forward" the furture and calculate the heuristic points. Looks at all possible action tat the agent can take, then return the action that lead to the best heuristic. The posible action will depend of with the nth of the action
+
+- In each action:
+	The agent need to find is any best hint need to verify. The Agent will evaluate hint by creating 2 Agent clone is MrPositive and MrNegative then that 2 clone will be verify the hint or not and continuos "look_forward" after action verify the hint or not. The evalute_hint will return the average heuristic value of the hint, weighted by the number of cells that are still suspicious after applying the hint. If find the best hint in that action we still need to calculate the max_heuristic between action verify that hint and the current best_heuristic action
+	Otherwise if the received hints list is empty. The Agent must decision what direction is the best to move. Agent will have a clone to look_forward what way if the Agent move and scan will is the best action
+	
+- We still have the action which not cost num of the actions is the tele. Tele need to "look_forward " of all position. If any position is valid, and it's not a mountain or sea, then it's good for the Agent.
+
+The best_heuristic will calculate by evaluate_position. It computes the sum of the shortest distances from each cell to the current position of the Agent
+
+Agent always look_forward before make decision and calculate if the agent do any action will it is beter than the current action. So that Agent always move and action the best_action
+
+Besides base on the hint and the position of the Agent. Agent stil need evaluate the pirate move. Agent will evaluates the pirate's move by comparing the cost of the new move to the cost of the old move. If the new move is better, the function updates the pirate's position and masks the old move

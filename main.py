@@ -16,6 +16,7 @@ import sys
 # o Move straight 3-4 steps in a direction.
 # o Stay and perform a large scan.
 
+
 def agent_win(scan):
     if scan == "small":
         return agent.small_scan()
@@ -24,8 +25,10 @@ def agent_win(scan):
     else:
         return agent.get_position() == game.TREASURE
 
+
 def pirate_win():
     return pirate.get_position() == game.TREASURE
+
 
 def game_loop():
     np.set_printoptions(threshold=sys.maxsize)
@@ -39,9 +42,11 @@ def game_loop():
     hints = []
 
     while True:
-        hint_number = random.choices(range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
+        hint_number = random.choices(
+            range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
         while hint_number == 6:
-            hint_number = random.choices(range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
+            hint_number = random.choices(
+                range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
 
         hint = Hint(hint_number, 0)
         if hint.truthness() == True:
@@ -50,7 +55,7 @@ def game_loop():
             if hint_number == 10 or hint_number == 11:
                 game.HINT_WEIGHTS[hint_number] = 0
             break
-    
+
     hint_6 = []
 
     log.append(f"\nGIVE HINT: {hint.hint}")
@@ -59,7 +64,7 @@ def game_loop():
     print(f"GIVE HINT: {hint.hint}")
     print(f"{HINTS_NAME[hint.hint-1]}")
     print(f"{hint.log}")
-    
+
     visualization.map['ratio'] &= agent.map
     visualization.map['mark'] = hint.map['mark']
     visualization.visualize()
@@ -95,7 +100,8 @@ def game_loop():
                 agent.move(dx, dy)
                 x, y = agent.get_position()
                 scan = "small"
-                log.append(f"\nSHORT MOVE AND SMALL SCAN: {dx}, {dy} | NEW POSITION: {x}, {y}")
+                log.append(
+                    f"\nSHORT MOVE AND SMALL SCAN: {dx}, {dy} | NEW POSITION: {x}, {y}")
             elif action[0] == "long move":
                 dx, dy = action[1]
                 agent.move(dx, dy)
@@ -112,7 +118,6 @@ def game_loop():
                 print("WIN")
                 visualization.visualize()
                 return log
-
 
         # Pirate turn
         free = turn >= game.FREE_TURN
@@ -149,17 +154,18 @@ def game_loop():
                     log.append("\nLOST")
                     print("LOST")
                     return log
-                agent.evaluate_pirate_move(new_pirate_x=Px, new_pirate_y=Py)            
-    
+                agent.evaluate_pirate_move(new_pirate_x=Px, new_pirate_y=Py)
+
         # Pirate gives hint
         print("PREPARE HINT")
 
-        hint_number = random.choices(range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
+        hint_number = random.choices(
+            range(NUM_OF_HINTS+1), weights=game.HINT_WEIGHTS, k=1)[0]
         hint = Hint(hint_number, turn)
 
-        if hint_number == 10 or hint_number == 11:
+        if hint_number == 10:
             game.HINT_WEIGHTS[hint_number] = 0
-        
+
         hints.append(hint)
 
         if hint.hint == 6 and not reveal:
@@ -181,10 +187,9 @@ def game_loop():
         print(f"{hint.log}")
         turn += 1
 
+
 if __name__ == "__main__":
     visualization = Visualization(width, height)
 
     log = game_loop()
     save_file_log(log)
-
-

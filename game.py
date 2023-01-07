@@ -1,12 +1,15 @@
 import numpy as np
 import random
-from const import * 
+from const import *
+
 
 class Game:
     def __init__(self, map, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty):
         # agents' constants
-        self.LONG_MOVES = [(0, 3), (3, 0), (0, -3), (-3, 0), (0, 4), (4, 0), (0, -4), (-4, 0)]
-        self.SHORT_MOVES = [(0, 1), (1, 0), (0, -1), (-1, 0), (0, 2), (2, 0), (0, -2), (-2, 0)]
+        self.LONG_MOVES = [(0, 3), (3, 0), (0, -3), (-3, 0),
+                           (0, 4), (4, 0), (0, -4), (-4, 0)]
+        self.SHORT_MOVES = [(0, 1), (1, 0), (0, -1), (-1, 0),
+                            (0, 2), (2, 0), (0, -2), (-2, 0)]
         self.PIRATE_MOVES = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         self.ACTIONS_IN_TURN = 2
 
@@ -17,10 +20,13 @@ class Game:
         self.MAP['region'] = np.copy(map['region'])
         self.MAP['entity'] = np.copy(map['entity'])
         self.NUM_OF_REGION = num_of_regions
-        self.REGION_LIST = self.get_region_list(height, width, with_mountain=False)
+        self.REGION_LIST = self.get_region_list(
+            height, width, with_mountain=False)
         self.REGION_MASK = self.get_region_mask(self.REGION_LIST)
-        self.REGION_WITH_MOUNTAIN_LIST = self.get_region_list(height, width, with_mountain=True)
-        self.REGION_WITH_MOUNTAIN_MASK = self.get_region_mask(self.REGION_WITH_MOUNTAIN_LIST)
+        self.REGION_WITH_MOUNTAIN_LIST = self.get_region_list(
+            height, width, with_mountain=True)
+        self.REGION_WITH_MOUNTAIN_MASK = self.get_region_mask(
+            self.REGION_WITH_MOUNTAIN_LIST)
         self.NEIGHBOUR_REGIONS = self.neighbour_region()
         self.SEA_MASK = self.MAP['region'] == 0
         self.REVEAL_TURN = reveal_turn
@@ -34,22 +40,22 @@ class Game:
         self.BAD_FOR_PIRATE = self.BAD_FOR_AGENT
         self.CACHE = {}
         self.HINT_WEIGHTS = [
-            NOT_IMPLEMENTED, # doesnt exist
-            NORMAL_WEIGHT, # 1
-            NORMAL_WEIGHT, # 2
-            NORMAL_WEIGHT, # 3
-            NORMAL_WEIGHT, # 4
-            NORMAL_WEIGHT, # 5
-            NORMAL_WEIGHT, # 6
+            NOT_IMPLEMENTED,  # doesnt exist
+            NORMAL_WEIGHT,  # 1
+            NORMAL_WEIGHT,  # 2
+            NORMAL_WEIGHT,  # 3
+            NORMAL_WEIGHT,  # 4
+            NORMAL_WEIGHT,  # 5
+            NORMAL_WEIGHT,  # 6
             RARE_WEIGHT,   # 7
-            NORMAL_WEIGHT, # 8
-            NORMAL_WEIGHT, # 9
-            NORMAL_WEIGHT, # 10
-            NORMAL_WEIGHT, # 11
+            NORMAL_WEIGHT,  # 8
+            NORMAL_WEIGHT,  # 9
+            NORMAL_WEIGHT,  # 10
+            NORMAL_WEIGHT,  # 11
             RARE_WEIGHT,   # 12
-            NORMAL_WEIGHT, # 13
+            NORMAL_WEIGHT,  # 13
             RARE_WEIGHT,   # 14
-            NORMAL_WEIGHT, # 15
+            NORMAL_WEIGHT,  # 15
             VERR_RARE_WEIGHT  # 16
         ]
 
@@ -59,7 +65,7 @@ class Game:
             mask = (self.MAP['region'] == region)
             result[region] = mask
         return result
-    
+
     def get_bad_list(self, height, width):
         result = np.zeros((height, width), dtype=np.bool_)
         for i in range(self.HEIGHT):
@@ -101,7 +107,7 @@ class Game:
             Ay = random.randrange(0, self.WIDTH)
             if self.good_for_treasure(Ax, Ay) and (not (Ax, Ay) == self.TREASURE):
                 return (Ax, Ay)
-    
+
     def neighbour_region(self):
         result = {}
         for region_1 in self.REGION_LIST:
@@ -109,17 +115,17 @@ class Game:
                 if region_1 >= region_2:
                     continue
                 tmp_1 = self.REGION_MASK[region_1].copy()
-                tmp_1[:-1, :] |= self.REGION_MASK[region_1][1: , : ]
-                tmp_1[1: , :] |= self.REGION_MASK[region_1][:-1, : ]
-                tmp_1[:, :-1] |= self.REGION_MASK[region_1][: , 1: ]
-                tmp_1[:, 1: ] |= self.REGION_MASK[region_1][: , :-1]
+                tmp_1[:-1, :] |= self.REGION_MASK[region_1][1:, :]
+                tmp_1[1:, :] |= self.REGION_MASK[region_1][:-1, :]
+                tmp_1[:, :-1] |= self.REGION_MASK[region_1][:, 1:]
+                tmp_1[:, 1:] |= self.REGION_MASK[region_1][:, :-1]
                 tmp_1 ^= self.REGION_MASK[region_1]
                 tmp_1 &= self.REGION_MASK[region_2]
                 tmp_2 = self.REGION_MASK[region_2].copy()
-                tmp_2[:-1, :] |= self.REGION_MASK[region_2][1: , : ]
-                tmp_2[1: , :] |= self.REGION_MASK[region_2][:-1, : ]
-                tmp_2[:, :-1] |= self.REGION_MASK[region_2][: , 1: ]
-                tmp_2[:, 1: ] |= self.REGION_MASK[region_2][: , :-1]
+                tmp_2[:-1, :] |= self.REGION_MASK[region_2][1:, :]
+                tmp_2[1:, :] |= self.REGION_MASK[region_2][:-1, :]
+                tmp_2[:, :-1] |= self.REGION_MASK[region_2][:, 1:]
+                tmp_2[:, 1:] |= self.REGION_MASK[region_2][:, :-1]
                 tmp_2 ^= self.REGION_MASK[region_2]
                 tmp_2 &= self.REGION_MASK[region_1]
                 tmp = tmp_1 | tmp_2

@@ -6,7 +6,7 @@ MOUNTAIN = 1
 PRISON = 2
 TREASURE = 3
 
-ENTITIES = ["","M","P","T"]
+ENTITIES = ["", "M", "P", "T"]
 
 # REGION
 SEA = 0
@@ -42,4 +42,3 @@ NOT_IMPLEMENTED = 0
 # AGENTS
 AGENT = 1
 PIRATE = 2
-

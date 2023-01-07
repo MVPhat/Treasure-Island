@@ -1,6 +1,7 @@
 import numpy as np
 from init import game
 
+
 class Pirate:
     def __init__(self, width, height, x, y) -> None:
         self.width = width
@@ -35,7 +36,7 @@ class Pirate:
         return seq
 
     def bfs(self, pirate_x, pirate_y):
-        cost = np.zeros((self.height, self.width)) 
+        cost = np.zeros((self.height, self.width))
         queue = []
         queue.append((pirate_x, pirate_y))
         i = 0

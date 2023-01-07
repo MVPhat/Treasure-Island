@@ -4,6 +4,7 @@ import numpy as np
 import random
 import time
 
+
 def readInputFile(filename):
     with open(filename, "r") as f:
         # - The first line contains 2 numbers to represent the size of the map (𝑾 and 𝑯).
@@ -39,17 +40,21 @@ def readInputFile(filename):
                     output['entity'][i][j] = TREASURE
     return (output, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty)
 
+
 def save_file_log(log):
     f = open(TEST_CASE, 'w')
     for line in log:
         f.write(line)
     f.close()
 
+
 EXAMPLE_FILE = "MAP_2.txt"
 TEST_CASE = "LOG_2.txt"
 
-map, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty = readInputFile(EXAMPLE_FILE)
+map, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty = readInputFile(
+    EXAMPLE_FILE)
 
-game = Game(map=map, width=width, height=height, reveal_turn=reveal_turn, free_turn=free_turn, num_of_regions=num_of_regions, Tx=Tx, Ty=Ty)
+game = Game(map=map, width=width, height=height, reveal_turn=reveal_turn,
+            free_turn=free_turn, num_of_regions=num_of_regions, Tx=Tx, Ty=Ty)
 
 random.seed(time.time())

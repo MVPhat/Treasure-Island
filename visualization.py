@@ -18,7 +18,7 @@ class Visualization:
         self.map['mark']   = np.zeros((height, width), dtype=np.bool_)
         self.map['ratio']  = np.ones((height, width), dtype=np.bool_)
         self.FONT_SIZE = 14 if width <= 16 else 8
-        self.SIZE = 40 if width <= 16 else 24
+        self.SIZE = 40 if width <= 16 else 20
         self.FONT = ('Arial', self.FONT_SIZE, 'normal')
         self.FONT_BOLD = ('Arial', self.FONT_SIZE, 'bold')
         self.COLORS = [(111, 168, 220), (255, 242, 204), (217, 210, 233),
@@ -69,25 +69,6 @@ class Visualization:
         self.greg.clear()
         self.marker.clear()
         self.greg.penup()
-        
-
-        # self.greg.goto(-size * (self.width/2), size * (self.height/2 + 1))
-        # for i in range(self.width):
-        #     color = 'white'
-        #     self.square(size, color, False)
-        #     self.marker.goto(self.greg.xcor() - size/2,
-        #                      self.greg.ycor() - size/2 - self.FONT_SIZE/2)
-        #     self.marker.write(i, align='center', font=self.FONT_BOLD)
-        # self.greg.goto(-size * (self.width/2+1), size * (self.height/2))
-
-        # for i in range(self.height):
-        #     color = 'white'
-        #     self.square(size, color, False)
-        #     self.marker.goto(self.greg.xcor() - size/2,
-        #                      self.greg.ycor() - size/2 - self.FONT_SIZE/2)
-        #     self.marker.write(i, align='center', font=self.FONT_BOLD)
-        #     self.greg.goto(-size * (self.height/2+1), size *
-        #                    self.width/2 - size * (i + 1))
 
         self.greg.goto(-size * self.width/2, size * self.height/2)
         for i in range(self.height):

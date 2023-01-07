@@ -49,10 +49,11 @@ def save_file_log(log):
         f.write(line)
     f.close()
 
-EXAMPLE_FILE = "MAP_1.txt"
-TEST_CASE = "LOG_1.txt"
+EXAMPLE_FILE = "MAP_0.txt"
+TEST_CASE = "LOG_0.txt"
 
 map, width, height, reveal_turn, free_turn, num_of_regions, Tx, Ty = readInputFile(
     EXAMPLE_FILE)
 
 game = Game(map=map, width=width, height=height, reveal_turn=reveal_turn, free_turn=free_turn, num_of_regions=num_of_regions, Tx=Tx, Ty=Ty)
+random.seed(time.time())

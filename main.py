@@ -6,7 +6,7 @@ from hint import Hint
 from visualization import Visualization
 import random
 import sys
-
+import time
 
 def agent_win(scan):
     if scan == "small":
@@ -177,7 +177,7 @@ def game_loop():
         print(f"{HINTS_NAME[hint.hint-1]}")
         print(f"{hint.log}")
         turn += 1
-
+        #time.sleep(5)
 
 if __name__ == "__main__":
     visualization = Visualization(width, height)

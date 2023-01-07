@@ -1,94 +1,125 @@
-
-GIVE HINT: 13
-From the center of the map/from the prison that he's staying, he tells you a direction that has the treasure (W, E, N, S or SE, SW, NE, NW) (The shape of area when the hints are either W, E, N or S is triangle)
-center, E
+WIN
+123
+GIVE HINT: 5
+A small rectangle area that doesn't has the treasure
+row1 = 0, row2 = 5, col1 = 14, col2 = 26
 TURN 1:
 AGENT TURN:
-SHORT MOVE AND SMALL SCAN: 0, -1 | NEW POSITION: 26, 26
-LONG MOVE: -4, 0 | NEW POSITION: 22, 26
+SHORT MOVE AND SMALL SCAN: 1, 0 | NEW POSITION: 19, 1
+SHORT MOVE AND SMALL SCAN: 0, 1 | NEW POSITION: 19, 2
 PIRATE TURN
-GIVE HINT: 11
-The treasure is somewhere in an area bounded by 2-3 tiles from sea
-ok
+GIVE HINT: 16
+A list of random tiles that contains the treasure (half of the map size) (very rare).
+[(19, 8), (7, 1), (30, 13), (14, 19), (24, 16), (19, 27), (17, 8), (8, 6), (25, 1), (16, 27), (0, 28), (4, 6), (13, 19), (25, 26), (24, 24), (2, 22), (12, 18), (19, 20), (2, 8), (4, 10), (12, 3), (20, 6), (14, 15), (0, 10), (23, 20), (26, 0), (30, 5), (7, 0), (12, 31), (18, 15), (8, 22), (15, 7), (15, 13), (8, 11), (16, 5), (8, 18), (11, 20), (4, 26), (19, 5), (22, 31), (22, 21), (14, 9), (14, 30), (19, 26), (11, 17), (19, 28), (6, 26), (4, 5), (16, 17), (26, 25), (1, 13), (10, 1), (16, 23), (3, 21), (12, 24), (11, 28), (20, 19), (25, 8), (11, 25), (24, 12), (26, 24), (25, 18), (31, 3), (15, 26), (4, 14), (11, 11), (26, 18), (1, 10), (13, 27), (5, 23), (29, 26), (4, 12), (25, 0), (18, 30), (27, 0), (26, 10), (24, 17), (4, 8), (27, 19), (26, 1), (8, 24), (26, 3), (20, 2), (3, 0), (27, 23), (18, 13), (6, 28), (6, 29), (24, 2), (14, 27), (2, 24), (27, 5), (2, 9), (20, 30), (20, 7), (10, 8), (11, 2), (21, 9), (20, 26), (0, 11), (18, 22), (3, 28), (30, 11), (30, 20), (31, 13), (11, 13), (5, 13), (22, 18), (15, 27), (10, 7), (19, 11), (12, 1), (27, 13), (25, 28), (3, 11), (6, 0), (18, 6), (5, 14), (30, 31), (8, 28), (26, 16), (7, 23), (8, 29), (13, 3), (23, 25), (8, 25), (4, 31), (18, 18), (2, 30), (25, 16), (9, 28), (27, 22), (6, 10), (11, 7), (6, 18), (25, 3), (14, 8), (14, 7), (21, 22), (23, 22), (9, 5), (3, 17), (11, 0), (4, 28), (17, 13), (11, 1), (0, 30), (30, 19), (14, 1), (18, 21), (6, 2), (9, 30), (2, 0), (30, 10), (12, 30), (25, 13), (6, 11), (29, 31), (17, 9), (14, 20), (28, 3), (30, 17), (4, 30), (27, 30), (3, 25), (20, 23), (13, 18), (6, 23), (9, 9), (23, 15), (20, 21), (7, 14), (18, 10), (7, 25), (12, 14), (8, 14), (30, 7), (0, 0), (16, 9), (27, 4), (28, 27), (11, 23), (23, 5), (9, 27), (26, 23), (2, 17), (1, 1), (28, 0), (10, 15), (4, 19), (10, 12), (3, 6), (1, 19), (10, 25), (2, 23), (7, 15), (13, 26), (20, 14), (27, 18), (10, 5), (21, 13), (26, 22), (15, 16), (16, 16), (25, 4), (25, 25), (29, 28), (6, 27), (0, 26), (2, 7), (4, 9), (0, 15), (22, 7), (2, 1), (14, 3), (20, 15), (2, 15), (31, 0), (30, 24), (0, 23), (29, 27), (18, 3), (31, 4), (12, 4), (16, 11), (5, 21), (30, 3), (21, 21), (20, 29), (17, 26), (16, 24), (29, 2), (22, 27), (13, 21), (10, 16), (29, 13), (22, 24), (20, 18), (20, 1), (29, 1), (29, 29), (10, 23), (30, 1), (23, 7), (22, 9), (1, 0), (28, 22), (29, 17), (8, 13), (14, 14), (9, 2), (22, 25), (21, 3), (15, 28), (8, 1), (21, 23), (20, 28), (23, 0), (6, 17), (2, 14), (23, 1), (22, 20), (16, 8), (12, 11), (12, 10), (18, 12), (26, 30), (31, 25), (9, 31), (18, 9), (30, 30), (9, 24), (15, 6), (17, 22), (6, 13), (15, 18), (30, 27), (5, 4), (25, 14), (22, 22), (31, 22), (24, 21), (4, 11), (15, 25), (12, 9), (29, 23), (18, 23), (13, 8), (17, 31), (14, 6), (26, 6), (10, 29), (22, 12), (21, 17), (4, 22), (3, 31), (5, 6), (8, 8), (12, 5), (0, 18), (9, 13), (21, 30), (3, 20), (6, 16), (10, 2), (4, 24), (19, 30), (1, 24), (13, 25), (23, 21), (3, 3), (26, 4), (21, 2), (0, 16), (17, 16), (29, 11), (6, 4), (26, 29), (17, 2), (8, 20), (4, 27), (13, 22), (10, 4), (0, 24), (27, 25), (26, 12), (23, 2), (20, 25), (14, 28), (15, 11), (4, 29), (16, 13), (23, 27), (14, 11), (3, 16), (14, 22), (24, 5), (28, 18), (3, 10), (3, 23), (22, 14), (7, 27), (9, 23), (5, 5), (4, 0), (26, 26), (21, 16), (17, 28), (9, 7), (16, 20), (8, 26), (28, 2), (14, 25), (14, 24), (15, 29), (28, 6), (25, 30), (3, 8), (19, 21), (13, 6), (11, 18), (5, 15), (30, 29), (17, 3), (27, 12), (6, 5), (28, 23), (22, 11), (31, 29), (7, 21), (20, 3), (31, 14), (6, 19), (15, 2), (12, 27), (17, 0), (12, 6), (4, 4), (19, 25), (24, 13), (3, 26), (31, 6), (12, 28), (4, 17), (27, 31), (10, 6), (8, 21), (0, 2), (5, 8), (5, 25), (29, 22), (23, 9), (23, 18), (11, 19), (9, 3), (17, 5), (13, 4), (1, 20), (22, 8), (7, 5), (9, 1), (11, 21), (8, 12), (18, 27), (29, 3), (5, 9), (25, 27), (28, 16), (15, 24), (0, 1), (1, 28), (10, 10), (25, 24), (6, 20), (2, 29), (0, 6), (6, 31), (26, 13), (3, 19), (2, 11), (16, 28), (13, 5), (5, 20), (8, 17), (7, 19), (23, 26), (3, 27), (24, 25), (24, 23), (9, 14), (2, 25), (24, 8), (6, 7), (21, 5), (10, 22), (16, 6), (7, 12), (10, 17), (16, 18), (17, 17), (25, 23), (10, 24), (17, 20), (6, 24), (5, 3), (29, 0), (31, 31), (2, 20), (7, 10), (14, 31), (4, 3), (1, 12), (17, 25), (20, 20), (14, 26), (9, 16), (30, 16), (15, 31), (29, 25), (22, 13), (10, 28), (27, 24), (7, 20), (16, 4), (12, 12), (17, 29), (12, 21), (27, 28), (28, 24), (28, 26), (8, 15), (11, 30), (31, 15), (7, 26), (31, 11), (2, 4), (11, 4), (20, 10), (9, 21), (24, 18), (1, 3), (10, 21), (15, 17), (4, 15), (1, 7), (18, 24), (23, 30), (7, 7), (29, 16), (17, 18), (4, 23), (26, 7), (19, 6), (23, 29), (8, 4), (11, 5), (26, 15), (21, 26), (1, 31), (7, 3), (12, 0), (18, 4), (4, 20), (31, 17), (23, 8), (26, 19), (29, 6), (9, 11), (19, 7), (21, 31), (11, 9), (4, 16)]
 TURN 2:
 AGENT TURN:
 VERIFY: HINT 1
-LONG MOVE: -3, 0 | NEW POSITION: 19, 26
+SHORT MOVE AND SMALL SCAN: 1, 0 | NEW POSITION: 20, 2
 PIRATE TURN
-PIRATE REVEALED: 26, 22
+PIRATE REVEALED: 18, 29
 GIVE HINT: 2
 2-5 regions that 1 of them has the treasure
-[5, 6, 2]
+[6, 2, 1, 3]
 TURN 3:
 AGENT TURN:
-BIG SCAN
-SHORT MOVE AND SMALL SCAN: -2, 0 | NEW POSITION: 17, 26
+VERIFY: HINT 2
+LONG MOVE: 0, 3 | NEW POSITION: 20, 5
 PIRATE TURN
-GIVE HINT: 11
-The treasure is somewhere in an area bounded by 2-3 tiles from sea
+GIVE HINT: 15
+The treasure is in a region that has mountain
 ok
 TURN 4:
 AGENT TURN:
-LONG MOVE: 0, 3 | NEW POSITION: 17, 29
-BIG SCAN
+VERIFY: HINT 3
+LONG MOVE: 0, 4 | NEW POSITION: 20, 9
 PIRATE TURN
-PIRATE FREED: 26, 22
-MOVE: -1, 0 | NEW POSITION 25, 22
-MOVE: 0, 1 | NEW POSITION 25, 23
-GIVE HINT: 9
-2 regions that the treasure is somewhere in their boundary
-3, 4
+PIRATE FREED: 18, 29
+MOVE: -1, 0 | NEW POSITION 17, 29
+MOVE: -1, 0 | NEW POSITION 16, 29
+GIVE HINT: 3
+1-3 regions that do not contain the treasure
+[3, 6, 2]
 TURN 5:
 AGENT TURN:
-SHORT MOVE AND SMALL SCAN: -2, 0 | NEW POSITION: 15, 29
-SHORT MOVE AND SMALL SCAN: -2, 0 | NEW POSITION: 13, 29
+VERIFY: HINT 4
+LONG MOVE: -3, 0 | NEW POSITION: 17, 9
 PIRATE TURN
-MOVE: 0, 1 | NEW POSITION 25, 24
-MOVE: -1, 0 | NEW POSITION 24, 24
-GIVE HINT: 11
-The treasure is somewhere in an area bounded by 2-3 tiles from sea
-ok
+MOVE: -1, 0 | NEW POSITION 15, 29
+MOVE: -1, 0 | NEW POSITION 14, 29
+GIVE HINT: 3
+1-3 regions that do not contain the treasure
+[3, 1, 5]
 TURN 6:
 AGENT TURN:
-VERIFY: HINT 5
-LONG MOVE: 0, -3 | NEW POSITION: 13, 26
+LONG MOVE: 0, 3 | NEW POSITION: 17, 12
+LONG MOVE: -3, 0 | NEW POSITION: 14, 12
 PIRATE TURN
-MOVE: -1, 0 | NEW POSITION 23, 24
-MOVE: -1, 0 | NEW POSITION 22, 24
-GIVE HINT: 9
-2 regions that the treasure is somewhere in their boundary
-1, 3
+MOVE: -1, 0 | NEW POSITION 13, 29
+MOVE: 0, -1 | NEW POSITION 13, 28
+GIVE HINT: 10
+The treasure is somewhere in a boundary of 2 regions
+ok
 TURN 7:
 AGENT TURN:
-LONG MOVE: -4, 0 | NEW POSITION: 9, 26
-BIG SCAN
+VERIFY: HINT 6
+LONG MOVE: 0, 4 | NEW POSITION: 14, 16
 PIRATE TURN
-MOVE: -1, 0 | NEW POSITION 21, 24
-MOVE: -1, 0 | NEW POSITION 20, 24
-GIVE HINT: 1
-A list of random tiles that doesn't contain the treasure (1 to 12)
-[(29, 25), (25, 15), (28, 4), (19, 7), (18, 14)]
+MOVE: 0, -1 | NEW POSITION 13, 27
+MOVE: 0, -1 | NEW POSITION 13, 26
+GIVE HINT: 15
+The treasure is in a region that has mountain
+ok
 TURN 8:
 AGENT TURN:
-SHORT MOVE AND SMALL SCAN: 0, 2 | NEW POSITION: 9, 28
-SHORT MOVE AND SMALL SCAN: 0, -2 | NEW POSITION: 9, 26
+LONG MOVE: -4, 0 | NEW POSITION: 10, 16
+SHORT MOVE AND SMALL SCAN: 0, 2 | NEW POSITION: 10, 18
 PIRATE TURN
-MOVE: -1, 0 | NEW POSITION 19, 24
-MOVE: -1, 0 | NEW POSITION 18, 24
-GIVE HINT: 1
-A list of random tiles that doesn't contain the treasure (1 to 12)
-[(4, 25), (3, 24), (13, 20), (14, 7), (23, 26), (20, 25), (3, 15), (11, 1)]
+MOVE: -1, 0 | NEW POSITION 12, 26
+MOVE: -1, 0 | NEW POSITION 11, 26
+GIVE HINT: 4
+A large rectangle area that has the treasure
+row1 = 15, row2 = 31, col1 = 1, col2 = 21
 TURN 9:
 AGENT TURN:
-LONG MOVE: -3, 0 | NEW POSITION: 6, 26
-BIG SCAN
+LONG MOVE: -3, 0 | NEW POSITION: 7, 18
+LONG MOVE: 0, 4 | NEW POSITION: 7, 22
 PIRATE TURN
-MOVE: -1, 0 | NEW POSITION 17, 24
-MOVE: -1, 0 | NEW POSITION 16, 24
-GIVE HINT: 2
-2-5 regions that 1 of them has the treasure
-[1, 3, 2]
+MOVE: -1, 0 | NEW POSITION 10, 26
+MOVE: -1, 0 | NEW POSITION 9, 26
+GIVE HINT: 8
+A column and/or a row that do not contain the treasure
+row: 11
 TURN 10:
 AGENT TURN:
+LONG MOVE: 0, 4 | NEW POSITION: 7, 26
+BIG SCAN
+PIRATE TURN
+MOVE: -1, 0 | NEW POSITION 8, 26
+MOVE: -1, 0 | NEW POSITION 7, 26
+GIVE HINT: 1
+A list of random tiles that doesn't contain the treasure (1 to 12)
+[array([ 2, 26], dtype=int64), array([ 6, 30], dtype=int64), array([ 5, 16], dtype=int64), array([ 6, 22], dtype=int64), array([ 1, 26], dtype=int64), array([ 7, 17], dtype=int64), array([ 6, 21], dtype=int64)]
+TURN 11:
+AGENT TURN:
+LONG MOVE: 0, -4 | NEW POSITION: 7, 22
+BIG SCAN
+PIRATE TURN
+MOVE: -1, 0 | NEW POSITION 6, 26
+MOVE: 0, 1 | NEW POSITION 6, 27
+GIVE HINT: 8
+A column and/or a row that do not contain the treasure
+row: 8
+TURN 12:
+AGENT TURN:
+SHORT MOVE AND SMALL SCAN: -1, 0 | NEW POSITION: 6, 22
+LONG MOVE: 0, 4 | NEW POSITION: 6, 26
+PIRATE TURN
+MOVE: 0, 1 | NEW POSITION 6, 28
+MOVE: 1, 0 | NEW POSITION 7, 28
+GIVE HINT: 1
+A list of random tiles that doesn't contain the treasure (1 to 12)
+[array([ 7, 29], dtype=int64)]
+TURN 13:
+AGENT TURN:
+BIG SCAN
 SHORT MOVE AND SMALL SCAN: 0, 2 | NEW POSITION: 6, 28
-WIN

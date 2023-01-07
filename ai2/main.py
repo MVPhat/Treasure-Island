@@ -45,6 +45,8 @@ def game_loop():
     # To make sure that the first hint is a truth hint.
 
     while True:
+        # Generating a random number from 0 to 6, with the probability of each number is defined in
+        # HINT_WEIGHTS.
         hint_number = random.choices(
             range(NUM_OF_HINTS+1), weights=HINT_WEIGHTS, k=1)[0]
         while hint_number == 6:

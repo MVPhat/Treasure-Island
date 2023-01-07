@@ -8,6 +8,7 @@ from const import *
 
 from init_2 import *
 
+
 class Visualization:
     def __init__(self, width, height):
         self.width = width
@@ -15,8 +16,8 @@ class Visualization:
         self.map = {}
         self.map['region'] = game.MAP['region']
         self.map['entity'] = game.MAP['entity']
-        self.map['mark']   = np.zeros((height, width), dtype=np.bool_)
-        self.map['ratio']  = np.ones((height, width), dtype=np.bool_)
+        self.map['mark'] = np.zeros((height, width), dtype=np.bool_)
+        self.map['ratio'] = np.ones((height, width), dtype=np.bool_)
         self.FONT_SIZE = 14 if width <= 16 else 8
         self.SIZE = 40 if width <= 16 else 24
         self.FONT = ('Arial', self.FONT_SIZE, 'normal')
@@ -24,7 +25,8 @@ class Visualization:
         self.COLORS = [(111, 168, 220), (255, 242, 204), (217, 210, 233),
                        (230, 184, 175), (234, 209, 220), (208, 224, 227), (217, 234, 211)]
         while len(self.COLORS) < game.NUM_OF_REGION:
-            self.COLORS.append((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+            self.COLORS.append(
+                (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
        # set screen characteristics
         self.screen = Screen()
         self.screen.title('Visualization')
@@ -68,31 +70,13 @@ class Visualization:
         ''' draw the whole chessboard '''
         self.greg.penup()
 
-        # self.greg.goto(-size * (self.width/2), size * (self.height/2 + 1))
-        # for i in range(self.width):
-        #     color = 'white'
-        #     self.square(size, color, False)
-        #     self.marker.goto(self.greg.xcor() - size/2,
-        #                      self.greg.ycor() - size/2 - self.FONT_SIZE/2)
-        #     self.marker.write(i, align='center', font=self.FONT_BOLD)
-        # self.greg.goto(-size * (self.width/2+1), size * (self.height/2))
-
-        # for i in range(self.height):
-        #     color = 'white'
-        #     self.square(size, color, False)
-        #     self.marker.goto(self.greg.xcor() - size/2,
-        #                      self.greg.ycor() - size/2 - self.FONT_SIZE/2)
-        #     self.marker.write(i, align='center', font=self.FONT_BOLD)
-        #     self.greg.goto(-size * (self.height/2+1), size *
-        #                    self.width/2 - size * (i + 1))
-
         self.greg.goto(-size * self.width/2, size * self.height/2)
         for i in range(self.height):
             for j in range(self.width):
                 region = map['region'][i][j]
                 entity = ENTITIES[map['entity'][i][j]]
-                mark   = map['mark'][i][j]
-                ratio  = map['ratio'][i][j]
+                mark = map['mark'][i][j]
+                ratio = map['ratio'][i][j]
 
                 if (i, j) == game.TREASURE:
                     self.marker.pencolor('yellow')
@@ -102,7 +86,7 @@ class Visualization:
                 if (i, j) == pirate.get_position():
                     entity += 'p'
                     self.marker.pencolor('red')
-                
+
                 text = f"{region}{entity}"
                 color = self.COLORS[region] if ratio == 1 else "gray"
 
